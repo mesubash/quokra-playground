@@ -46,9 +46,32 @@ Requires Node 20.19+ (see `.nvmrc`) and pnpm.
 ```bash
 pnpm install
 pnpm dev       # http://localhost:5173
-pnpm build     # type-check and build to dist/
+pnpm build     # type-check, build to dist/, then pre-render the public pages
 pnpm lint
 ```
+
+## Search and deploying
+
+The public pages, `/` and `/docs`, are pre-rendered to real HTML at build time
+(`scripts/prerender.mjs`, rendering `src/entry-server.tsx`), so search engines,
+link previews and crawlers that don't run JavaScript see the content. The build
+also writes `robots.txt`, `sitemap.xml` and `spa.html`, the empty app shell for
+every other route. Those routes are demo screens and are marked `noindex`.
+
+Titles, descriptions and the public address (`SITE_URL`) live in
+`src/config/seo.ts`; `RouteMeta` keeps the tags in step as you navigate.
+
+Serve `dist/` with this rule: an existing file first, then `<path>/index.html`,
+then `spa.html`. For nginx:
+
+```nginx
+location / {
+  try_files $uri $uri/index.html /spa.html;
+}
+```
+
+Netlify: `/* /spa.html 200` in `public/_redirects`. Vercel: a rewrite from
+`/(.*)` to `/spa.html` (Vercel serves existing files before rewrites).
 
 ## Quokra
 

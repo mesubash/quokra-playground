@@ -18,7 +18,11 @@ export function ThemeProvider({
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = React.useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
+    () =>
+      // No localStorage during the build-time render (scripts/prerender.mjs)
+      (typeof window !== "undefined" &&
+        (localStorage.getItem(storageKey) as Theme)) ||
+      defaultTheme
   )
 
   React.useEffect(() => {
