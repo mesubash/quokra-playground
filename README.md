@@ -1,8 +1,17 @@
-# Quokra Playground
+<p align="center">
+  <img src="public/logo.png" alt="Quokra logo" width="96" height="96" />
+</p>
 
-A realistic admin dashboard with [Quokra](https://github.com/mesubash/quokra) embedded, for trying Quokra the way a real app uses it.
+<h1 align="center">Quokra Playground</h1>
 
-Built with React 19, Vite, TypeScript, Tailwind CSS v4 and shadcn/ui.
+<p align="center">
+  A realistic admin dashboard with <a href="https://github.com/mesubash/quokra">Quokra</a>
+  embedded, for trying Quokra the way a real app uses it.
+</p>
+
+<p align="center">
+  React 19 · Vite · TypeScript · Tailwind CSS v4 · shadcn/ui
+</p>
 
 ## Pages
 
@@ -15,6 +24,7 @@ Built with React 19, Vite, TypeScript, Tailwind CSS v4 and shadcn/ui.
 - **Mail**: inbox with a reading pane
 - **Chat**: conversation list and messages
 - **Settings**: user, account, appearance and notifications
+- **Support** (`/support`, agents only): the full Quokra agent console
 
 The pages use sample data from local JSON files under `src/app/*/data`.
 
@@ -70,6 +80,7 @@ src/
   config/       routes
   contexts/     theme and sidebar state
   hooks/        shared hooks
+public/         logo.png, favicons and site.webmanifest
 ```
 
 To add a page, create `src/app/<name>/page.tsx`, register it in
