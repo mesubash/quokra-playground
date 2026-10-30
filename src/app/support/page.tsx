@@ -1,12 +1,16 @@
 import { useEffect, useRef, useState } from "react"
 import { useSearchParams } from "react-router-dom"
+import { RefreshCw, Unplug } from "lucide-react"
 import { BaseLayout } from "@/components/layouts/base-layout"
-import { agentToken, loadQuokra, QUOKRA_TENANT } from "@/lib/quokra"
+import { Button } from "@/components/ui/button"
+import { agentToken, loadQuokra, QUOKRA_TENANT, QUOKRA_URL } from "@/lib/quokra"
 
 // The full Quokra agent console, inside the dashboard's own layout.
 export default function SupportPage() {
   const container = useRef<HTMLDivElement>(null)
-  const [error, setError] = useState<string | null>(null)
+  const [failed, setFailed] = useState(false)
+  // Bumped by "Try again" to load the console once more.
+  const [attempt, setAttempt] = useState(0)
   // Set when coming from the drawer's "Open full view"; read once when the console mounts.
   const [params] = useSearchParams()
   const conversation = useRef(params.get("conversation"))
@@ -23,12 +27,12 @@ export default function SupportPage() {
           conversation: conversation.current,
         })
       })
-      .catch((e: Error) => setError(e.message))
+      .catch(() => !cancelled && setFailed(true))
     return () => {
       cancelled = true
       window.Quokra?.console.unmount()
     }
-  }, [])
+  }, [attempt])
 
   return (
     <BaseLayout
@@ -36,10 +40,38 @@ export default function SupportPage() {
       description="Customer conversations, answered live"
     >
       <div className="px-4 lg:px-6">
-        {error ? (
-          <p className="rounded-lg border border-dashed p-6 text-sm text-muted-foreground">
-            {error}
-          </p>
+        {failed ? (
+          <div
+            role="alert"
+            className="flex min-h-[320px] flex-col items-center justify-center gap-3 rounded-xl border border-dashed p-8 text-center"
+          >
+            <div className="flex size-12 items-center justify-center rounded-full bg-muted">
+              <Unplug className="size-5 text-muted-foreground" aria-hidden />
+            </div>
+            <h2 className="text-lg font-semibold">
+              The support console can't be reached
+            </h2>
+            <p className="max-w-sm text-sm text-pretty text-muted-foreground">
+              It may be restarting or offline. Your conversations are safe; try
+              again in a moment.
+            </p>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setFailed(false)
+                setAttempt((n) => n + 1)
+              }}
+            >
+              <RefreshCw data-icon="inline-start" />
+              Try again
+            </Button>
+            {import.meta.env.DEV && (
+              <p className="mt-2 max-w-sm text-xs text-muted-foreground">
+                Developers: start Quokra (<code>docker compose up</code> in the
+                Quokra repo) and check that it's at <code>{QUOKRA_URL}</code>.
+              </p>
+            )}
+          </div>
         ) : (
           <div
             ref={container}

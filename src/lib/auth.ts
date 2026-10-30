@@ -51,7 +51,7 @@ export function signOut() {
   clearSession()
 }
 
-function clearSession() {
+export function clearSession() {
   localStorage.removeItem(KEY)
   document.cookie = `${COOKIE}=; path=/; max-age=0`
 }
