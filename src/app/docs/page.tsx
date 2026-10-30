@@ -9,6 +9,7 @@ import { docsUrl } from "@/app/landing/links"
 
 const toc = [
   { id: "integrate", label: "Integrate" },
+  { id: "guides", label: "Guides" },
   { id: "api", label: "API at a glance" },
   { id: "customize", label: "Make it yours" },
   { id: "security", label: "Security" },
@@ -75,6 +76,98 @@ Quokra.chat.logout();          // on logout`,
   },
 ]
 
+// The step-by-step guides in the Quokra repo (docs/guides), summed up.
+const guides = [
+  {
+    file: "guides/01-get-started.md",
+    title: "Get started",
+    summary:
+      "Run Quokra, PostgreSQL and a demo login with Docker, and try both sides of a chat.",
+    steps: [
+      "docker compose up --build in the Quokra repo",
+      "Chat as a customer at localhost:8080/w/demo?pk=pk_test_demo",
+      "Answer as sam / sam from this playground's Support page",
+    ],
+  },
+  {
+    file: "guides/02-set-up-a-company.md",
+    title: "Set up a company",
+    summary:
+      "Admins create each company in the console's Admin tab and get its keys and embed code.",
+    steps: [
+      "Admin → New company: slug, name, colour, bot file, when quiet chats close",
+      "List the websites (chat) and dashboards (console) allowed to embed it",
+      "Copy the publishable key and the ready-made embed snippets",
+      "Add agents by work email; create the secret key if you identify customers",
+    ],
+  },
+  {
+    file: "guides/03-add-the-chat.md",
+    title: "Add the chat to a website",
+    summary: "One script tag for a bubble, or inline and popup placements.",
+    steps: [
+      "Paste the script tag before </body>",
+      "Optional: data-quokra-theme, data-quokra-accent, data-quokra-position",
+      "Listen for unavailable to show your own contact options if Quokra is down",
+    ],
+  },
+  {
+    file: "guides/04-add-the-console.md",
+    title: "Add the console to a dashboard",
+    summary:
+      "A full Support page, or a button with a side drawer on every page.",
+    steps: [
+      "Quokra.console.mount on your Support page, with getToken from your login",
+      'Or Quokra.console.init({ mode: "bubble" }) in your layout, with fullView',
+      "Pass notifications: true for sounds, toasts and browser notifications",
+    ],
+  },
+  {
+    file: "guides/05-identify-customers.md",
+    title: "Identify logged-in customers",
+    summary:
+      "Agents see who they're talking to; customers keep one chat across devices.",
+    steps: [
+      "Your backend signs a 5-minute HS256 token with the company's secret key",
+      "The page calls Quokra.chat.identify(token) after login",
+      "Call Quokra.chat.logout() when they log out",
+    ],
+  },
+  {
+    file: "guides/06-connect-your-login.md",
+    title: "Connect your identity provider",
+    summary:
+      "Agents sign in with your company login: Keycloak, Auth0, Okta, Entra ID or your own.",
+    steps: [
+      "Roles SUPPORT_AGENT and QUOKRA_ADMIN, audience quokra-api in access tokens",
+      "Set OIDC_ISSUER_URI (and the roles claim) on the Quokra server",
+      "Check with GET /api/v1/agent/me: 200 is good, 401 bad token, 403 missing role",
+    ],
+  },
+  {
+    file: "guides/07-write-the-bot.md",
+    title: "Write the bot",
+    summary:
+      "A YAML file per company: greeting, menu, keywords, urgent words and wording.",
+    steps: [
+      "Copy the demo bot file and point QUOKRA_BOTS_DIR at your folder",
+      "Write the menu answers and keywords; add urgent words that go straight to the team",
+      "Pick the file for the company in the Admin tab",
+    ],
+  },
+  {
+    file: "guides/08-notifications.md",
+    title: "Notifications",
+    summary:
+      "New chats, replies in my chats, transfers and notes, each with its own sound.",
+    steps: [
+      "The dashboard passes notifications: true",
+      "Agents click Turn on once to allow browser notifications",
+      "The bell menu chooses what notifies each agent, and how",
+    ],
+  },
+]
+
 const sdkCalls = [
   [
     "Quokra.chat.init({ slug, pk, mode, theme, accent })",
@@ -96,7 +189,11 @@ const sdkCalls = [
   ],
   [
     'Quokra.console.on("unread", n => …)',
-    "Waiting chats, e.g. for a nav badge",
+    "Waiting chats plus unread in my chats, e.g. for a nav badge",
+  ],
+  [
+    "notifications: true",
+    "Console option: sounds, toasts and browser notifications for agents",
   ],
 ]
 
@@ -123,7 +220,9 @@ const realtimeEvents = [
   "conversation.updated",
   "conversation.waiting",
   "conversation.activity",
+  "conversation.transferred",
   "note.created",
+  "note.added",
 ]
 
 const customizations = [
@@ -280,6 +379,40 @@ export default function DocsPage() {
             <p className="mt-8">
               <DocsLink file="EMBEDDING.md">Full embedding guide</DocsLink>
             </p>
+          </section>
+
+          <section className="mt-20">
+            <Heading id="guides">Guides</Heading>
+            <p className="mt-4 text-muted-foreground">
+              Step by step, from running it locally to notifications. Each links
+              to the full guide in the Quokra repo.
+            </p>
+            <ol className="mt-8 grid gap-4 sm:grid-cols-2">
+              {guides.map((guide, i) => (
+                <li
+                  key={guide.file}
+                  className="flex flex-col gap-3 rounded-xl border p-5"
+                >
+                  <h3 className="font-medium">
+                    <span className="mr-2 text-muted-foreground tabular-nums">
+                      {i + 1}.
+                    </span>
+                    {guide.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {guide.summary}
+                  </p>
+                  <ul className="list-disc space-y-1 pl-5 text-sm marker:text-foreground/40">
+                    {guide.steps.map((step) => (
+                      <li key={step}>{step}</li>
+                    ))}
+                  </ul>
+                  <p className="mt-auto pt-1">
+                    <DocsLink file={guide.file}>Read the guide</DocsLink>
+                  </p>
+                </li>
+              ))}
+            </ol>
           </section>
 
           <section className="mt-20 space-y-10">
