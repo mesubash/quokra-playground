@@ -1,11 +1,23 @@
 import { useEffect, useRef, useState } from "react"
 import { BaseLayout } from "@/components/layouts/base-layout"
-import { agentToken, loadQuokra, QUOKRA_TENANT } from "@/lib/quokra"
+import { useTheme } from "@/hooks/use-theme"
+import {
+  agentToken,
+  loadQuokra,
+  QUOKRA_TENANT,
+  quokraTheme,
+} from "@/lib/quokra"
 
 // The full Quokra agent console, inside the dashboard's own layout.
 export default function SupportPage() {
   const container = useRef<HTMLDivElement>(null)
   const [error, setError] = useState<string | null>(null)
+  const theme = quokraTheme(useTheme().theme)
+  const themeRef = useRef(theme)
+
+  useEffect(() => {
+    themeRef.current = theme
+  }, [theme])
 
   useEffect(() => {
     let cancelled = false
@@ -16,6 +28,7 @@ export default function SupportPage() {
           tenant: QUOKRA_TENANT,
           getToken: agentToken,
           height: "100%",
+          theme: themeRef.current,
         })
       })
       .catch((e: Error) => setError(e.message))

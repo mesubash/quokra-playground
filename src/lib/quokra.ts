@@ -8,16 +8,20 @@ export const QUOKRA_PK = import.meta.env.VITE_QUOKRA_PK ?? "pk_test_demo"
 
 type Listener = (value?: unknown) => void
 
+export type QuokraTheme = "light" | "dark" | "auto"
+
 export interface QuokraSdk {
   chat: {
     init(options: {
       slug: string
       pk: string
       position?: "left" | "right"
+      theme?: QuokraTheme
     }): void
     open(): void
     close(): void
     identify(token: string): void
+    setTheme(theme: QuokraTheme): void
     on(event: string, fn: Listener): void
     destroy(): void
   }
@@ -28,6 +32,7 @@ export interface QuokraSdk {
         tenant: string
         getToken: () => Promise<string>
         height?: string
+        theme?: QuokraTheme
       }
     ): void
     init(options: {
@@ -35,10 +40,12 @@ export interface QuokraSdk {
       tenant: string
       getToken: () => Promise<string>
       position?: "left" | "right"
+      theme?: QuokraTheme
     }): void
     open(): void
     close(): void
     on(event: string, fn: Listener): void
+    setTheme(theme: QuokraTheme): void
     unmount(): void
   }
 }
@@ -80,6 +87,11 @@ async function token(path: string): Promise<string> {
 
 // Identity token for the signed-in customer, signed by our backend.
 export const identityToken = () => token("/api/quokra/identity")
+
+// The dashboard's theme, in Quokra's terms ("system" is "auto").
+export function quokraTheme(theme: "light" | "dark" | "system"): QuokraTheme {
+  return theme === "system" ? "auto" : theme
+}
 
 // Access token for the signed-in agent.
 export const agentToken = () => token("/api/quokra/agent-token")
