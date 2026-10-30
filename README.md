@@ -105,4 +105,7 @@ apps and settings.
 
 ## License
 
-MIT. See [License.md](License.md).
+The code is MIT licensed. See [License.md](License.md).
+
+The Quokra name and logo (`public/logo.png` and the favicons in `public/`) are
+not covered by the MIT license and may not be reused without permission.
