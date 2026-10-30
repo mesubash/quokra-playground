@@ -23,11 +23,13 @@
   demo, roadmap and FAQ
 - **Docs** (`/docs`): integration snippets, API overview, customization and
   security for developers
-- **Login** (`/login`): mock sign-in with two tabs. **Customer**: any email, no
-  password. **Support agent**: pick Sam or Alex, the demo agents in Quokra's
-  dev data. The session is stored in `localStorage` and a cookie for the dev
-  backend (see `src/lib/auth.ts`); signed-out visitors are sent to `/login`.
-  Log out sits in the header and the user menu.
+- **Login** (`/login`): two tabs. **Customer**: mock sign-in, any email, no
+  password. **Support agent**: real sign-in on the identity provider's own
+  page (Keycloak locally) as Sam or Alex, which returns to `/auth/callback`.
+  The app session is stored in `localStorage` and a cookie for the dev backend
+  (see `src/lib/auth.ts` and `src/lib/oidc.ts`); signed-out visitors are sent
+  to `/login`. Log out sits in the header and the user menu, and for agents
+  also ends the identity provider session.
 - **Dashboard**: stat cards, an area chart and a data table
 - **Users**: user table with add/edit dialog
 - **Mail**: inbox with a reading pane
@@ -57,25 +59,34 @@ This app embeds [Quokra](https://github.com/mesubash/quokra) the way a real app 
 - **Agents** get a **Support** page with the full console, and the console bubble
   on every other page.
 
-Sign in as a customer (any email) or as a demo agent (Sam or Alex). Open both in
-two windows, or one in a private window, to see the chat live.
+Sign in as a customer (any email) or as an agent: Sam (password `sam`) or Alex
+(password `alex`) on the Keycloak login page. Open both in two windows, or one
+in a private window, to see the chat live.
 
 ### Running it
 
 1. Start Quokra locally with the dev profile (see Quokra's `docs/DEVELOPMENT.md`).
-   Its dev data already allows `http://localhost:5173` and has both demo agents.
-2. `cp .env.example .env.local` (the defaults match Quokra's dev setup).
+   Its `compose.yaml` also starts Keycloak on `http://localhost:8180` with the
+   `quokra` realm, the `quokra-dashboard` client and both demo agents. Quokra's
+   dev data already allows `http://localhost:5173`.
+2. `cp .env.example .env.local`. The defaults match Quokra's dev setup:
+   `VITE_QUOKRA_*` for the chat, `VITE_OIDC_AUTHORITY` and
+   `VITE_OIDC_CLIENT_ID` for agent login, and `QUOKRA_SECRET_KEY` for the dev
+   backend. To use another OIDC provider, point `VITE_OIDC_AUTHORITY` at it.
 3. `pnpm dev`
 
 ### How the tokens work
 
-Quokra needs two tokens that a real app's backend provides. Here a small dev
-backend inside the Vite server stands in for it (`dev/quokra-api.ts`):
+Quokra needs two tokens, the same ones a real app would provide:
 
-- `POST /api/quokra/identity`: signs a 5-minute identity token for the signed-in
-  customer with `QUOKRA_SECRET_KEY`. The key stays on the server side.
-- `POST /api/quokra/agent-token`: gets an agent token from Quokra's dev endpoint.
-  A real dashboard would pass on the access token from its own login (OIDC).
+- **Agent token**: the agent's access token from the identity provider. The
+  app signs agents in with OIDC and PKCE (`oidc-client-ts`, `src/lib/oidc.ts`),
+  keeps the tokens in `localStorage` so every tab shares the login, refreshes
+  them in the background, and hands the access token to the console.
+- **Customer identity token**: a small dev backend inside the Vite server
+  stands in for the app's backend (`dev/quokra-api.ts`).
+  `POST /api/quokra/identity` signs a 5-minute token for the signed-in customer
+  with `QUOKRA_SECRET_KEY`, which stays on the server side.
 
 The browser side is in `src/lib/quokra.ts`, `src/components/quokra/` and
 `src/app/support/`.
