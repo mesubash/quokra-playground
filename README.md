@@ -70,8 +70,9 @@ location / {
 }
 ```
 
-Netlify: `/* /spa.html 200` in `public/_redirects`. Vercel: a rewrite from
-`/(.*)` to `/spa.html` (Vercel serves existing files before rewrites).
+The live site runs on Vercel, where `vercel.json` holds this rule (Vercel
+serves existing files before rewrites). Netlify: `/* /spa.html 200` in
+`public/_redirects`.
 
 ## Quokra
 
