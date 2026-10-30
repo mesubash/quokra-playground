@@ -20,7 +20,7 @@
 ## Pages
 
 - **Landing** (`/`): presents Quokra: how it works, what you get, the live
-  demo and FAQ (copy from `docs/QUOKRA_CONTENT.md`)
+  demo, roadmap and FAQ
 - **Docs** (`/docs`): integration snippets, API overview, customization and
   security for developers
 - **Login** (`/login`): mock sign-in with two tabs. **Customer**: any email, no
@@ -80,12 +80,21 @@ backend inside the Vite server stands in for it (`dev/quokra-api.ts`):
 The browser side is in `src/lib/quokra.ts`, `src/components/quokra/` and
 `src/app/support/`.
 
-## Docs
+## Copy rules
 
-- [Content brief: Quokra on the landing page](docs/QUOKRA_CONTENT.md): what
-  Quokra is, which sections to add to the marketing page (how it works,
-  integration, API, FAQ), ready-to-use copy and code, and the facts to keep
-  accurate.
+When editing the marketing pages (`src/app/landing/`, `src/app/docs/`), keep
+the claims true to Quokra v1. The Quokra repo's `README.md` and `docs/` are the
+source of truth.
+
+- **Say:** FAQ bot from a per-company file; human handoff in the same
+  conversation; chat as bubble, inline or popup; console as full page or
+  drawer; agent login through the host's OIDC; customer identify with HS256
+  tokens of at most 5 minutes; light/dark, accent colour, per-company wording.
+- **Don't say** (not built yet): AI answers or "AI-powered", WhatsApp or email
+  channels, analytics or CSAT, a hosted SaaS, pricing or sign-up, attachments,
+  canned replies, business hours. These may appear only on the roadmap,
+  marked as planned.
+- **Tone:** plain, short, concrete. No "revolutionary" or "seamless".
 
 ## Project layout
 

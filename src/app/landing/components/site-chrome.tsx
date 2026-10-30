@@ -62,8 +62,9 @@ const navItems = [
   { label: "Roadmap", to: "/#roadmap" },
 ]
 
+// Underline grows left to right on hover and focus, and stays on the current page
 const navLink =
-  "hidden rounded-md px-3 py-2 text-sm whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground aria-[current=page]:text-foreground sm:inline-flex"
+  "relative hidden px-3 py-2 text-sm whitespace-nowrap text-muted-foreground rounded-md transition-colors outline-none hover:text-foreground focus-visible:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 aria-[current=page]:text-foreground sm:inline-flex after:absolute after:inset-x-3 after:bottom-1 after:h-px after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100 focus-visible:after:scale-x-100 aria-[current=page]:after:scale-x-100 motion-reduce:after:transition-none"
 
 export function MarketingHeader() {
   return (
