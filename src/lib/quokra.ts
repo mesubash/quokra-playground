@@ -8,7 +8,8 @@ export const QUOKRA_PK = import.meta.env.VITE_QUOKRA_PK ?? "pk_test_demo"
 
 type Listener = (value?: unknown) => void
 
-export type QuokraTheme = "light" | "dark" | "auto"
+// "host" (Quokra's default) follows this app's own light/dark mode.
+export type QuokraTheme = "host" | "light" | "dark" | "auto"
 
 export interface QuokraSdk {
   chat: {
@@ -90,11 +91,6 @@ async function token(path: string): Promise<string> {
 
 // Identity token for the signed-in customer, signed by our backend.
 export const identityToken = () => token("/api/quokra/identity")
-
-// The dashboard's theme, in Quokra's terms ("system" is "auto").
-export function quokraTheme(theme: "light" | "dark" | "system"): QuokraTheme {
-  return theme === "system" ? "auto" : theme
-}
 
 // Access token for the signed-in agent.
 export const agentToken = () => token("/api/quokra/agent-token")
