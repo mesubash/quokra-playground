@@ -17,6 +17,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from "@/components/ui/sidebar"
 
 export function NavMain({
@@ -37,6 +38,7 @@ export function NavMain({
   }[]
 }) {
   const location = useLocation()
+  const { state, isMobile, setOpen } = useSidebar()
 
   // Check if any subitem is active to determine if parent should be open
   const shouldBeOpen = (item: (typeof items)[0]) => {
@@ -64,6 +66,11 @@ export function NavMain({
                     <SidebarMenuButton
                       tooltip={item.title}
                       className="cursor-pointer"
+                      isActive={shouldBeOpen(item)}
+                      // Collapsed to icons, the sub-pages are hidden: expand the sidebar to show them
+                      onClick={() => {
+                        if (state === "collapsed" && !isMobile) setOpen(true)
+                      }}
                     />
                   }
                 >
@@ -78,23 +85,7 @@ export function NavMain({
                         <SidebarMenuSubButton
                           className="cursor-pointer"
                           isActive={location.pathname === subItem.url}
-                          render={
-                            <Link
-                              to={subItem.url}
-                              target={
-                                item.title === "Auth Pages" ||
-                                item.title === "Errors"
-                                  ? "_blank"
-                                  : undefined
-                              }
-                              rel={
-                                item.title === "Auth Pages" ||
-                                item.title === "Errors"
-                                  ? "noopener noreferrer"
-                                  : undefined
-                              }
-                            />
-                          }
+                          render={<Link to={subItem.url} />}
                         >
                           <span>{subItem.title}</span>
                         </SidebarMenuSubButton>
