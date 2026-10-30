@@ -21,6 +21,7 @@ export interface QuokraSdk {
     open(): void
     close(): void
     identify(token: string): void
+    logout(): void
     setTheme(theme: QuokraTheme): void
     on(event: string, fn: Listener): void
     destroy(): void

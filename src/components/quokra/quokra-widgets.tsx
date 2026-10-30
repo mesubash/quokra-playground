@@ -30,8 +30,10 @@ export function QuokraWidgets() {
     window.Quokra?.console.setTheme(theme)
   }, [theme])
 
+  // The chat bubble stays for visitors and customers; it isn't rebuilt when someone signs in or out.
+  const showChat = role !== "agent"
   useEffect(() => {
-    if (role === "agent") return
+    if (!showChat) return
     let cancelled = false
     loadQuokra()
       .then((quokra) => {
@@ -41,23 +43,37 @@ export function QuokraWidgets() {
           pk: QUOKRA_PK,
           theme: themeRef.current,
         })
-        if (role === "customer") {
-          quokra.chat.on("identifyfailed", (code) =>
-            console.warn("Quokra identify failed:", code)
-          )
-          identityToken()
-            .then((token) => !cancelled && quokra.chat.identify(token))
-            .catch((e) =>
-              console.warn("Couldn't get a Quokra identity token:", e)
-            )
-        }
+        quokra.chat.on("identifyfailed", (code) =>
+          console.warn("Quokra identify failed:", code)
+        )
       })
       .catch((e) => console.warn(e))
     return () => {
       cancelled = true
       window.Quokra?.chat.destroy()
     }
-  }, [role, user?.email])
+  }, [showChat])
+
+  // Signing in as a customer identifies the chat; signing out logs it out, so the
+  // next person on this browser starts as a fresh guest.
+  const customerEmail = role === "customer" ? user!.email : null
+  const lastCustomer = useRef<string | null>(null)
+  useEffect(() => {
+    const previous = lastCustomer.current
+    lastCustomer.current = customerEmail
+    if (!showChat) return
+    if (previous && previous !== customerEmail) {
+      loadQuokra().then((quokra) => quokra.chat.logout())
+    }
+    if (!customerEmail) return
+    let cancelled = false
+    Promise.all([loadQuokra(), identityToken()])
+      .then(([quokra, token]) => !cancelled && quokra.chat.identify(token))
+      .catch((e) => console.warn("Couldn't identify the Quokra chat:", e))
+    return () => {
+      cancelled = true
+    }
+  }, [customerEmail, showChat])
 
   useEffect(() => {
     if (role !== "agent" || onSupportPage) return
