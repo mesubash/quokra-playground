@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import { useSearchParams } from "react-router-dom"
 import { BaseLayout } from "@/components/layouts/base-layout"
 import { useTheme } from "@/hooks/use-theme"
 import {
@@ -12,6 +13,9 @@ import {
 export default function SupportPage() {
   const container = useRef<HTMLDivElement>(null)
   const [error, setError] = useState<string | null>(null)
+  // Set when coming from the drawer's "Open full view"; read once when the console mounts.
+  const [params] = useSearchParams()
+  const conversation = useRef(params.get("conversation"))
   const theme = quokraTheme(useTheme().theme)
   const themeRef = useRef(theme)
 
@@ -29,6 +33,7 @@ export default function SupportPage() {
           getToken: agentToken,
           height: "100%",
           theme: themeRef.current,
+          conversation: conversation.current,
         })
       })
       .catch((e: Error) => setError(e.message))

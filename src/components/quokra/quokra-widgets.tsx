@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { getUser } from "@/lib/auth"
 import { useTheme } from "@/hooks/use-theme"
 import {
@@ -16,6 +16,7 @@ import {
 //   agents: the console bubble, except on /support where the full console is mounted
 export function QuokraWidgets() {
   const { pathname } = useLocation()
+  const navigate = useNavigate()
   const user = getUser()
   const role = user?.role ?? "visitor"
   const onSupportPage = pathname.startsWith("/support")
@@ -70,6 +71,9 @@ export function QuokraWidgets() {
             tenant: QUOKRA_TENANT,
             getToken: agentToken,
             theme: themeRef.current,
+            // "Open full view" in the drawer goes to the Support page, same conversation.
+            fullView: (id) =>
+              navigate(id ? `/support?conversation=${id}` : "/support"),
           })
       )
       .catch((e) => console.warn(e))
@@ -77,7 +81,7 @@ export function QuokraWidgets() {
       cancelled = true
       window.Quokra?.console.unmount()
     }
-  }, [role, onSupportPage, user?.email])
+  }, [role, onSupportPage, user?.email, navigate])
 
   return null
 }

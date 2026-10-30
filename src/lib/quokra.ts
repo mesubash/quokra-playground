@@ -33,6 +33,7 @@ export interface QuokraSdk {
         getToken: () => Promise<string>
         height?: string
         theme?: QuokraTheme
+        conversation?: string | null
       }
     ): void
     init(options: {
@@ -41,6 +42,7 @@ export interface QuokraSdk {
       getToken: () => Promise<string>
       position?: "left" | "right"
       theme?: QuokraTheme
+      fullView?: string | ((conversationId: string | null) => void)
     }): void
     open(): void
     close(): void
