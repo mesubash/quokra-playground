@@ -6,6 +6,10 @@ Built with React 19, Vite, TypeScript, Tailwind CSS v4 and shadcn/ui.
 
 ## Pages
 
+- **Landing** (`/`): marketing page with a sign-in call to action
+- **Login** (`/login`): mock sign-in, any email and password works.
+  The session is stored in `localStorage` (see `src/lib/auth.ts`); signed-out
+  visitors are sent to `/login`. Log out sits in the header and the user menu.
 - **Dashboard**: stat cards, an area chart and a data table
 - **Users**: user table with add/edit dialog
 - **Mail**: inbox with a reading pane
