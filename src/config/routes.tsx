@@ -14,6 +14,7 @@ function page(load: () => Promise<{ default: ComponentType }>) {
 export const routes: RouteObject[] = [
   { path: "/", lazy: page(() => import("@/app/landing/page")) },
   { path: "/docs", lazy: page(() => import("@/app/docs/page")) },
+  { path: "/auth/callback", lazy: page(() => import("@/app/auth/callback")) },
   {
     path: "/login",
     loader: () => (getUser() ? redirect("/dashboard") : null),

@@ -1,7 +1,8 @@
 import { redirect, type LoaderFunctionArgs } from "react-router-dom"
+import { oidc } from "@/lib/oidc"
 
-// Mock session for playground use: not real authentication. Customers sign in with any email;
-// agents pick one of the demo agents that are set up in Quokra's dev data.
+// Playground session. Customers use a mock login (any email). Agents sign in for real through the
+// identity provider (src/lib/oidc.ts); this keeps their name and role for the UI.
 const KEY = "quokra-playground-session"
 // The dev backend (dev/quokra-api.ts) reads the session from this cookie, the way a real
 // backend would read its own session cookie.
@@ -15,9 +16,11 @@ export interface SessionUser {
   role: Role
 }
 
-export const DEMO_AGENTS: SessionUser[] = [
-  { name: "Sam", email: "sam@playground.test", role: "agent" },
-  { name: "Alex", email: "alex@playground.test", role: "agent" },
+// The agents in the local Keycloak realm (Quokra's server/keycloak/quokra-realm.json).
+// Dev only: their passwords are public.
+export const DEMO_AGENTS = [
+  { name: "Sam", username: "sam", password: "sam" },
+  { name: "Alex", username: "alex", password: "alex" },
 ]
 
 export function getUser(): SessionUser | null {
@@ -39,6 +42,16 @@ export function signIn(user: SessionUser) {
 }
 
 export function signOut() {
+  // Agents also end their session at the identity provider, which then returns to /login.
+  if (getUser()?.role === "agent") {
+    clearSession()
+    void oidc.signoutRedirect().catch(() => oidc.removeUser())
+    return
+  }
+  clearSession()
+}
+
+function clearSession() {
   localStorage.removeItem(KEY)
   document.cookie = `${COOKIE}=; path=/; max-age=0`
 }

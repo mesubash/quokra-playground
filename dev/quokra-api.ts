@@ -2,23 +2,16 @@ import { createHmac } from "node:crypto"
 import type { IncomingMessage, ServerResponse } from "node:http"
 import type { Connect, Plugin } from "vite"
 
-// A tiny stand-in for the playground's backend. Quokra needs two things a real backend provides:
-//   POST /api/quokra/identity     a short-lived identity token for the signed-in customer,
-//                                 signed with the tenant secret key (which never reaches the browser)
-//   POST /api/quokra/agent-token  an agent access token (here from Quokra's dev endpoint; a real
-//                                 dashboard would hand over the token from its own OIDC login)
+// A tiny stand-in for the playground's backend, for the one thing Quokra needs from a backend:
+//   POST /api/quokra/identity  a short-lived identity token for the signed-in customer,
+//                              signed with the tenant secret key (which never reaches the browser).
+// Agents don't need it: they sign in at the identity provider and the console uses that token.
 // It runs inside the Vite dev/preview server, so there's nothing extra to start.
 
 interface SessionUser {
   name: string
   email: string
   role: "customer" | "agent"
-}
-
-// Demo agents and their Quokra dev ids (see Quokra's db/dev seed data).
-const AGENT_SUBS: Record<string, string> = {
-  "sam@playground.test": "dev-agent",
-  "alex@playground.test": "dev-agent-2",
 }
 
 const base64url = (data: string | Buffer) =>
@@ -65,7 +58,6 @@ function send(res: ServerResponse, status: number, body: unknown) {
 }
 
 export function quokraApi(env: Record<string, string>): Plugin {
-  const quokraUrl = env.QUOKRA_URL || "http://localhost:8080"
   const secret = env.QUOKRA_SECRET_KEY
 
   const handler: Connect.NextHandleFunction = async (req, res, next) => {
@@ -80,29 +72,6 @@ export function quokraApi(env: Record<string, string>): Plugin {
       if (!secret)
         return send(res, 500, { error: "Set QUOKRA_SECRET_KEY in .env.local" })
       return send(res, 200, { token: signIdentityToken(user, secret) })
-    }
-
-    if (req.url === "/api/quokra/agent-token") {
-      const sub = AGENT_SUBS[user.email]
-      if (user.role !== "agent" || !sub)
-        return send(res, 403, { error: "Not a demo agent" })
-      try {
-        const response = await fetch(`${quokraUrl}/dev/agent-token`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ sub, name: user.name }),
-        })
-        if (!response.ok)
-          return send(res, 502, { error: `Quokra answered ${response.status}` })
-        const { accessToken } = (await response.json()) as {
-          accessToken: string
-        }
-        return send(res, 200, { token: accessToken })
-      } catch {
-        return send(res, 502, {
-          error: `Quokra isn't reachable at ${quokraUrl}`,
-        })
-      }
     }
 
     return next()

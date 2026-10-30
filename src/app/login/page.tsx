@@ -25,6 +25,7 @@ import {
   signIn,
   type SessionUser,
 } from "@/lib/auth"
+import { oidc } from "@/lib/oidc"
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -43,6 +44,17 @@ export default function LoginPage() {
         replace: true,
       }
     )
+  }
+
+  // Agents sign in at the identity provider; it sends them back to /auth/callback.
+  function agentSignIn(username: string) {
+    setPending(true)
+    void oidc
+      .signinRedirect({
+        login_hint: username,
+        state: { next: params.get("next") },
+      })
+      .catch(() => setPending(false))
   }
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -152,16 +164,17 @@ export default function LoginPage() {
                   </TabsContent>
                   <TabsContent value="agent">
                     <p className="mb-3 text-sm text-muted-foreground">
-                      Answer chats from the Support page.
+                      Answer chats from the Support page. You sign in on the
+                      real login page (Keycloak).
                     </p>
                     <div className="grid gap-2">
                       {DEMO_AGENTS.map((agent) => (
                         <Button
-                          key={agent.email}
+                          key={agent.username}
                           variant="outline"
                           className="h-auto justify-start gap-3 py-3"
                           disabled={pending}
-                          onClick={() => enter(agent)}
+                          onClick={() => agentSignIn(agent.username)}
                         >
                           <Headset className="size-4" aria-hidden />
                           <span className="flex flex-col items-start">
@@ -169,7 +182,7 @@ export default function LoginPage() {
                               Sign in as {agent.name}
                             </span>
                             <span className="text-xs text-muted-foreground">
-                              {agent.email}
+                              Password: {agent.password}
                             </span>
                           </span>
                         </Button>

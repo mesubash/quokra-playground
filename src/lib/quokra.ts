@@ -93,4 +93,4 @@ async function token(path: string): Promise<string> {
 export const identityToken = () => token("/api/quokra/identity")
 
 // Access token for the signed-in agent.
-export const agentToken = () => token("/api/quokra/agent-token")
+export { accessToken as agentToken } from "@/lib/oidc"
