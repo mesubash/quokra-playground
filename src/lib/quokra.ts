@@ -94,3 +94,18 @@ export const identityToken = () => token("/api/quokra/identity")
 
 // Access token for the signed-in agent.
 export { accessToken as agentToken } from "@/lib/oidc"
+
+// Quokra's sdk.js fires "unavailable" when its console doesn't load in time (e.g. Quokra is down).
+// One listener for the page, pointing at whatever screen wants to know right now.
+let onUnavailable: (() => void) | null = null
+let listening = false
+
+export function whenConsoleUnavailable(
+  quokra: QuokraSdk,
+  fn: (() => void) | null
+) {
+  onUnavailable = fn
+  if (listening) return
+  listening = true
+  quokra.console.on("unavailable", () => onUnavailable?.())
+}

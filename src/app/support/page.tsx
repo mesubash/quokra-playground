@@ -3,7 +3,13 @@ import { useSearchParams } from "react-router-dom"
 import { RefreshCw, Unplug } from "lucide-react"
 import { BaseLayout } from "@/components/layouts/base-layout"
 import { Button } from "@/components/ui/button"
-import { agentToken, loadQuokra, QUOKRA_TENANT, QUOKRA_URL } from "@/lib/quokra"
+import {
+  agentToken,
+  loadQuokra,
+  QUOKRA_TENANT,
+  QUOKRA_URL,
+  whenConsoleUnavailable,
+} from "@/lib/quokra"
 
 // The full Quokra agent console, inside the dashboard's own layout.
 export default function SupportPage() {
@@ -20,6 +26,7 @@ export default function SupportPage() {
     loadQuokra()
       .then((quokra) => {
         if (cancelled || !container.current) return
+        whenConsoleUnavailable(quokra, () => !cancelled && setFailed(true))
         quokra.console.mount(container.current, {
           tenant: QUOKRA_TENANT,
           getToken: agentToken,
@@ -30,6 +37,7 @@ export default function SupportPage() {
       .catch(() => !cancelled && setFailed(true))
     return () => {
       cancelled = true
+      if (window.Quokra) whenConsoleUnavailable(window.Quokra, null)
       window.Quokra?.console.unmount()
     }
   }, [attempt])
