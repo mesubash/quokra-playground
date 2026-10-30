@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge"
+import { CodeBlock } from "@/components/code-block"
 import {
   DemoButton,
   MarketingFooter,
@@ -151,14 +152,6 @@ const securityPoints = [
   "Rate limits, blocked contacts, and messages always shown as plain text.",
 ]
 
-function Code({ children }: { children: string }) {
-  return (
-    <pre className="overflow-x-auto rounded-lg border bg-muted p-4 text-sm">
-      <code>{children}</code>
-    </pre>
-  )
-}
-
 function DocsLink({ file, children }: { file: string; children: string }) {
   return (
     <a
@@ -278,7 +271,7 @@ export default function DocsPage() {
                       {"lead" in block && (
                         <p className="text-muted-foreground">{block.lead}</p>
                       )}
-                      <Code>{block.code}</Code>
+                      <CodeBlock>{block.code}</CodeBlock>
                     </div>
                   ))}
                 </li>

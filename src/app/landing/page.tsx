@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/accordion"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { CodeBlock } from "@/components/code-block"
 import {
   DemoButton,
   GitHubButton,
@@ -449,12 +450,10 @@ export default function LandingPage() {
               <p className="mb-3 text-sm text-muted-foreground">
                 Run it locally (needs Java 21+, Docker and pnpm):
               </p>
-              <pre className="overflow-x-auto rounded-lg border bg-muted p-4 text-sm">
-                <code>{`cd web && pnpm install && pnpm build
+              <CodeBlock>{`cd web && pnpm install && pnpm build
 cd ../server && ./mvnw spring-boot:run \\
   -Dspring-boot.run.profiles=dev
-# http://localhost:8080/console`}</code>
-              </pre>
+# http://localhost:8080/console`}</CodeBlock>
               <p className="mt-3 text-sm text-muted-foreground">
                 The dev profile starts PostgreSQL with Docker Compose and loads
                 a demo tenant.
