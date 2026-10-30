@@ -1,6 +1,6 @@
 # Quokra Playground
 
-A minimal admin dashboard for testing ideas against a realistic UI.
+A realistic admin dashboard with [Quokra](https://github.com/mesubash/quokra) embedded, for trying Quokra the way a real app uses it.
 
 Built with React 19, Vite, TypeScript, Tailwind CSS v4 and shadcn/ui.
 
@@ -29,9 +29,9 @@ pnpm build     # type-check and build to dist/
 pnpm lint
 ```
 
-## Quokra (branch `quokra`)
+## Quokra
 
-This branch embeds [Quokra](https://github.com/mesubash/quokra) the way a real app would:
+This app embeds [Quokra](https://github.com/mesubash/quokra) the way a real app would:
 
 - **Visitors and customers** get the Quokra chat bubble on every page. Signed-in
   customers are identified, so the support team sees who they are.
