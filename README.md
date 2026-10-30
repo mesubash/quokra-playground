@@ -13,13 +13,17 @@
   React 19 · Vite · TypeScript · Tailwind CSS v4 · shadcn/ui
 </p>
 
+![The playground dashboard with the Quokra chat open, handing a customer over to the team](public/screens/dashboard-with-chat.jpg)
+
+![The Quokra agent console on the Support page, where Sam joined the conversation and replied](public/screens/agent-console.jpg)
+
 ## Pages
 
 - **Landing** (`/`): presents Quokra: how it works, what you get, the live
   demo and FAQ (copy from `docs/QUOKRA_CONTENT.md`)
 - **Docs** (`/docs`): integration snippets, API overview, customization and
   security for developers
-- **Login** (`/login`): mock sign-in with two tabs. **Customer**: any email and
+- **Login** (`/login`): mock sign-in with two tabs. **Customer**: any email, no
   password. **Support agent**: pick Sam or Alex, the demo agents in Quokra's
   dev data. The session is stored in `localStorage` and a cookie for the dev
   backend (see `src/lib/auth.ts`); signed-out visitors are sent to `/login`.

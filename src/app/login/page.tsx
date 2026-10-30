@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
-import { ArrowLeft, Check, Headset } from "lucide-react"
+import { ArrowLeft, Headset } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -9,7 +9,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Logo } from "@/components/logo"
 import { ModeToggle } from "@/components/mode-toggle"
@@ -20,12 +25,6 @@ import {
   signIn,
   type SessionUser,
 } from "@/lib/auth"
-
-const highlights = [
-  "Sign in as a customer to chat with support",
-  "Sign in as an agent to answer from the Support page",
-  "Open both in two windows to see it live",
-]
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -53,27 +52,39 @@ export default function LoginPage() {
 
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
-      <aside className="relative hidden flex-col justify-between bg-muted p-10 lg:flex">
+      <aside className="relative hidden flex-col gap-10 overflow-hidden bg-muted p-10 lg:flex">
         <Link to="/" className="flex items-center gap-2 font-semibold">
           <Logo size={36} />
           Quokra Playground
         </Link>
-        <div className="max-w-md">
-          <h2 className="text-3xl font-bold tracking-tight text-balance">
-            Bot first. Human when it matters. Same conversation.
+        <div className="my-auto">
+          <h2 className="max-w-md text-3xl font-bold tracking-tight text-balance">
+            See both sides of one conversation
           </h2>
-          <ul className="mt-8 space-y-3 text-muted-foreground">
-            {highlights.map((item) => (
-              <li key={item} className="flex items-center gap-3">
-                <Check className="size-4 text-primary" aria-hidden />
-                {item}
-              </li>
-            ))}
-          </ul>
+          <p className="mt-4 max-w-md text-muted-foreground">
+            Customers chat from the dashboard. Agents answer from the Support
+            page, with the whole history in front of them.
+          </p>
+          <figure className="mt-10">
+            <img
+              src="/screens/agent-console.jpg"
+              alt="The Quokra agent console with Sam's chats and a conversation he joined."
+              width={1312}
+              height={582}
+              className="h-auto w-full rounded-xl border shadow-sm dark:hidden"
+            />
+            <img
+              src="/screens/agent-console-dark.jpg"
+              alt="The Quokra agent console with Sam's chats and a conversation he joined."
+              width={1312}
+              height={582}
+              className="hidden h-auto w-full rounded-xl border shadow-sm dark:block"
+            />
+            <figcaption className="mt-3 text-sm text-muted-foreground">
+              What Sam sees on the Support page.
+            </figcaption>
+          </figure>
         </div>
-        <p className="text-sm text-muted-foreground">
-          Playground login: customers use any email; agents pick a demo agent.
-        </p>
       </aside>
 
       <main className="flex flex-col p-6 md:p-10">
@@ -100,9 +111,9 @@ export default function LoginPage() {
             </Link>
             <Card>
               <CardHeader className="text-center">
-                <CardTitle className="text-xl">Welcome back</CardTitle>
+                <CardTitle className="text-xl">Try the demo</CardTitle>
                 <CardDescription>
-                  Sign in as a customer or a support agent
+                  No account needed. Pick a side.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -124,29 +135,25 @@ export default function LoginPage() {
                             defaultValue="pat@example.test"
                             required
                           />
-                        </Field>
-                        <Field>
-                          <FieldLabel htmlFor="password">Password</FieldLabel>
-                          <Input
-                            id="password"
-                            name="password"
-                            type="password"
-                            autoComplete="current-password"
-                            defaultValue="playground"
-                            required
-                          />
+                          <FieldDescription>
+                            Any email works. You'll land on the dashboard with
+                            the chat in the corner.
+                          </FieldDescription>
                         </Field>
                         <Button
                           type="submit"
                           className="w-full"
                           disabled={pending}
                         >
-                          {pending ? "Signing in…" : "Sign in"}
+                          {pending ? "Signing in…" : "Continue as customer"}
                         </Button>
                       </FieldGroup>
                     </form>
                   </TabsContent>
                   <TabsContent value="agent">
+                    <p className="mb-3 text-sm text-muted-foreground">
+                      Answer chats from the Support page.
+                    </p>
                     <div className="grid gap-2">
                       {DEMO_AGENTS.map((agent) => (
                         <Button
@@ -172,9 +179,9 @@ export default function LoginPage() {
                 </Tabs>
               </CardContent>
             </Card>
-            <p className="text-center text-xs text-balance text-muted-foreground lg:hidden">
-              Playground login: customers use any email; agents pick a demo
-              agent.
+            <p className="text-center text-sm text-balance text-muted-foreground">
+              To see both sides at once, sign in as an agent in a private
+              window.
             </p>
           </div>
         </div>
