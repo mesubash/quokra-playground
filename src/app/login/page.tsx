@@ -60,7 +60,7 @@ export default function LoginPage() {
         </Link>
         <div className="max-w-md">
           <h2 className="text-3xl font-bold tracking-tight text-balance">
-            A realistic admin UI to test your ideas against
+            Bot first. Human when it matters. Same conversation.
           </h2>
           <ul className="mt-8 space-y-3 text-muted-foreground">
             {highlights.map((item) => (

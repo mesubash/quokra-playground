@@ -15,7 +15,8 @@
 
 ## Pages
 
-- **Landing** (`/`): marketing page with a sign-in call to action
+- **Landing** (`/`): presents Quokra: how it works, features, integration
+  snippets, API overview, security and FAQ (copy from `docs/QUOKRA_CONTENT.md`)
 - **Login** (`/login`): mock sign-in with two tabs. **Customer**: any email and
   password. **Support agent**: pick Sam or Alex, the demo agents in Quokra's
   dev data. The session is stored in `localStorage` and a cookie for the dev
