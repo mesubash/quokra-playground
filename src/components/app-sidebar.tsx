@@ -106,9 +106,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" render={<Link to="/dashboard" />}>
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                <Logo size={24} className="text-current" />
-              </div>
+              <Logo size={32} />
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">Quokra Playground</span>
                 <span className="truncate text-xs">

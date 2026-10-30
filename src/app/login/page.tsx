@@ -55,9 +55,7 @@ export default function LoginPage() {
     <div className="grid min-h-svh lg:grid-cols-2">
       <aside className="relative hidden flex-col justify-between bg-muted p-10 lg:flex">
         <Link to="/" className="flex items-center gap-2 font-semibold">
-          <div className="flex size-9 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            <Logo size={24} />
-          </div>
+          <Logo size={36} />
           Quokra Playground
         </Link>
         <div className="max-w-md">
@@ -97,9 +95,7 @@ export default function LoginPage() {
               to="/"
               className="flex items-center gap-2 self-center font-semibold lg:hidden"
             >
-              <div className="flex size-9 items-center justify-center rounded-md bg-primary text-primary-foreground">
-                <Logo size={24} />
-              </div>
+              <Logo size={36} />
               Quokra Playground
             </Link>
             <Card>
