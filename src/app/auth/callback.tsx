@@ -2,7 +2,13 @@ import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { signIn } from "@/lib/auth"
+import type { User } from "oidc-client-ts"
 import { oidc } from "@/lib/oidc"
+
+// The code from the identity provider can be exchanged only once. React runs effects twice in
+// development, and a second exchange makes the provider revoke the whole login (Keycloak: "Code already
+// used"), after which refreshing the token fails. So the exchange is shared, not repeated.
+let finishing: Promise<User> | null = null
 
 // Where the identity provider sends the agent back after signing in.
 export default function AuthCallback() {
@@ -10,8 +16,8 @@ export default function AuthCallback() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    oidc
-      .signinRedirectCallback()
+    finishing ??= oidc.signinRedirectCallback()
+    finishing
       .then((user) => {
         signIn({
           name: user.profile.name ?? user.profile.preferred_username ?? "Agent",
