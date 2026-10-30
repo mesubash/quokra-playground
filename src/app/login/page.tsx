@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
-import { ArrowLeft, Check } from "lucide-react"
+import { ArrowLeft, Check, Headset } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -13,12 +13,18 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Logo } from "@/components/logo"
 import { ModeToggle } from "@/components/mode-toggle"
-import { signIn } from "@/lib/auth"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  customerFromEmail,
+  DEMO_AGENTS,
+  signIn,
+  type SessionUser,
+} from "@/lib/auth"
 
 const highlights = [
-  "Dashboard with charts and a data table",
-  "Users, Mail and Chat apps",
-  "Settings, command search and dark mode",
+  "Sign in as a customer to chat with support",
+  "Sign in as an agent to answer from the Support page",
+  "Open both in two windows to see it live",
 ]
 
 export default function LoginPage() {
@@ -26,18 +32,23 @@ export default function LoginPage() {
   const [params] = useSearchParams()
   const [pending, setPending] = useState(false)
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
+  function enter(user: SessionUser) {
     setPending(true)
-    signIn(String(new FormData(e.currentTarget).get("email")))
+    signIn(user)
     const next = params.get("next")
+    const fallback = user.role === "agent" ? "/support" : "/dashboard"
     // Only follow same-app paths, never "//host" or absolute URLs
     navigate(
-      next?.startsWith("/") && !next.startsWith("//") ? next : "/dashboard",
+      next?.startsWith("/") && !next.startsWith("//") ? next : fallback,
       {
         replace: true,
       }
     )
+  }
+
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    enter(customerFromEmail(String(new FormData(e.currentTarget).get("email"))))
   }
 
   return (
@@ -63,7 +74,7 @@ export default function LoginPage() {
           </ul>
         </div>
         <p className="text-sm text-muted-foreground">
-          Playground login: any email and password works.
+          Playground login: customers use any email; agents pick a demo agent.
         </p>
       </aside>
 
@@ -94,42 +105,80 @@ export default function LoginPage() {
             <Card>
               <CardHeader className="text-center">
                 <CardTitle className="text-xl">Welcome back</CardTitle>
-                <CardDescription>Sign in to open the dashboard</CardDescription>
+                <CardDescription>
+                  Sign in as a customer or a support agent
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={onSubmit}>
-                  <FieldGroup className="grid gap-4">
-                    <Field>
-                      <FieldLabel htmlFor="email">Email</FieldLabel>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        autoComplete="email"
-                        defaultValue="admin@quokra.dev"
-                        required
-                      />
-                    </Field>
-                    <Field>
-                      <FieldLabel htmlFor="password">Password</FieldLabel>
-                      <Input
-                        id="password"
-                        name="password"
-                        type="password"
-                        autoComplete="current-password"
-                        defaultValue="playground"
-                        required
-                      />
-                    </Field>
-                    <Button type="submit" className="w-full" disabled={pending}>
-                      {pending ? "Signing in…" : "Sign in"}
-                    </Button>
-                  </FieldGroup>
-                </form>
+                <Tabs defaultValue="customer">
+                  <TabsList className="mb-4 w-full">
+                    <TabsTrigger value="customer">Customer</TabsTrigger>
+                    <TabsTrigger value="agent">Support agent</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="customer">
+                    <form onSubmit={onSubmit}>
+                      <FieldGroup className="grid gap-4">
+                        <Field>
+                          <FieldLabel htmlFor="email">Email</FieldLabel>
+                          <Input
+                            id="email"
+                            name="email"
+                            type="email"
+                            autoComplete="email"
+                            defaultValue="pat@example.test"
+                            required
+                          />
+                        </Field>
+                        <Field>
+                          <FieldLabel htmlFor="password">Password</FieldLabel>
+                          <Input
+                            id="password"
+                            name="password"
+                            type="password"
+                            autoComplete="current-password"
+                            defaultValue="playground"
+                            required
+                          />
+                        </Field>
+                        <Button
+                          type="submit"
+                          className="w-full"
+                          disabled={pending}
+                        >
+                          {pending ? "Signing in…" : "Sign in"}
+                        </Button>
+                      </FieldGroup>
+                    </form>
+                  </TabsContent>
+                  <TabsContent value="agent">
+                    <div className="grid gap-2">
+                      {DEMO_AGENTS.map((agent) => (
+                        <Button
+                          key={agent.email}
+                          variant="outline"
+                          className="h-auto justify-start gap-3 py-3"
+                          disabled={pending}
+                          onClick={() => enter(agent)}
+                        >
+                          <Headset className="size-4" aria-hidden />
+                          <span className="flex flex-col items-start">
+                            <span className="font-medium">
+                              Sign in as {agent.name}
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                              {agent.email}
+                            </span>
+                          </span>
+                        </Button>
+                      ))}
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
             <p className="text-center text-xs text-balance text-muted-foreground lg:hidden">
-              Playground login: any email and password works.
+              Playground login: customers use any email; agents pick a demo
+              agent.
             </p>
           </div>
         </div>

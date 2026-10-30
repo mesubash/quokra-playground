@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import {
+  Headset,
   LayoutDashboard,
   Mail,
   MessageCircle,
@@ -87,7 +88,18 @@ const data = {
   ],
 }
 
+// Agents also get the Support page with the Quokra console.
+const supportGroup = {
+  label: "Support",
+  items: [{ title: "Support", url: "/support", icon: Headset }],
+}
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const user = getUser()
+  const groups =
+    user?.role === "agent"
+      ? [data.navGroups[0], supportGroup, ...data.navGroups.slice(1)]
+      : data.navGroups
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -99,19 +111,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">Quokra Playground</span>
-                <span className="truncate text-xs">Admin Dashboard</span>
+                <span className="truncate text-xs">
+                  {user?.role === "agent" ? "Support agent" : "Customer"}
+                </span>
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        {data.navGroups.map((group) => (
+        {groups.map((group) => (
           <NavMain key={group.label} label={group.label} items={group.items} />
         ))}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={{ ...getUser()!, avatar: "" }} />
+        <NavUser user={{ ...user!, avatar: "" }} />
       </SidebarFooter>
     </Sidebar>
   )

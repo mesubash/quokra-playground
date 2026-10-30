@@ -1,6 +1,6 @@
 import type { ComponentType } from "react"
 import { redirect, type RouteObject } from "react-router-dom"
-import { getUser, requireAuth } from "@/lib/auth"
+import { getUser, requireAgent, requireAuth } from "@/lib/auth"
 
 /**
  * Every page is code-split. With the data router, a route's code is loaded
@@ -26,6 +26,11 @@ export const routes: RouteObject[] = [
       { path: "/users", lazy: page(() => import("@/app/users/page")) },
       { path: "/mail", lazy: page(() => import("@/app/mail/page")) },
       { path: "/chat", lazy: page(() => import("@/app/chat/page")) },
+      {
+        path: "/support",
+        loader: requireAgent,
+        lazy: page(() => import("@/app/support/page")),
+      },
       {
         path: "/settings/user",
         lazy: page(() => import("@/app/settings/user/page")),

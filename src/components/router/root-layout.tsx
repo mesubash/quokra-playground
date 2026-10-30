@@ -1,6 +1,7 @@
 import { Outlet, useNavigation } from "react-router-dom"
 
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
+import { QuokraWidgets } from "@/components/quokra/quokra-widgets"
 
 /** Thin top bar shown while the next route's code is loading. */
 function RouteProgress() {
@@ -21,6 +22,7 @@ export function RootLayout() {
     <>
       {navigation.state === "loading" && <RouteProgress />}
       <Outlet />
+      <QuokraWidgets />
     </>
   )
 }

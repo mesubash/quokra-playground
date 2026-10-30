@@ -29,6 +29,38 @@ pnpm build     # type-check and build to dist/
 pnpm lint
 ```
 
+## Quokra (branch `quokra`)
+
+This branch embeds [Quokra](https://github.com/mesubash/quokra) the way a real app would:
+
+- **Visitors and customers** get the Quokra chat bubble on every page. Signed-in
+  customers are identified, so the support team sees who they are.
+- **Agents** get a **Support** page with the full console, and the console bubble
+  on every other page.
+
+Sign in as a customer (any email) or as a demo agent (Sam or Alex). Open both in
+two windows, or one in a private window, to see the chat live.
+
+### Running it
+
+1. Start Quokra locally with the dev profile (see Quokra's `docs/DEVELOPMENT.md`).
+   Its dev data already allows `http://localhost:5173` and has both demo agents.
+2. `cp .env.example .env.local` (the defaults match Quokra's dev setup).
+3. `pnpm dev`
+
+### How the tokens work
+
+Quokra needs two tokens that a real app's backend provides. Here a small dev
+backend inside the Vite server stands in for it (`dev/quokra-api.ts`):
+
+- `POST /api/quokra/identity`: signs a 5-minute identity token for the signed-in
+  customer with `QUOKRA_SECRET_KEY`. The key stays on the server side.
+- `POST /api/quokra/agent-token`: gets an agent token from Quokra's dev endpoint.
+  A real dashboard would pass on the access token from its own login (OIDC).
+
+The browser side is in `src/lib/quokra.ts`, `src/components/quokra/` and
+`src/app/support/`.
+
 ## Project layout
 
 ```
