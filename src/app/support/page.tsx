@@ -30,6 +30,7 @@ export default function SupportPage() {
         quokra.console.mount(container.current, {
           tenant: QUOKRA_TENANT,
           getToken: agentToken,
+          notifications: true,
           height: "100%",
           conversation: conversation.current,
         })

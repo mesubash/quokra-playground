@@ -36,6 +36,7 @@ export interface QuokraSdk {
         height?: string
         theme?: QuokraTheme
         conversation?: string | null
+        notifications?: boolean
       }
     ): void
     init(options: {
@@ -45,6 +46,7 @@ export interface QuokraSdk {
       position?: "left" | "right"
       theme?: QuokraTheme
       fullView?: string | ((conversationId: string | null) => void)
+      notifications?: boolean
     }): void
     open(): void
     close(): void

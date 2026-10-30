@@ -74,6 +74,8 @@ export function QuokraWidgets() {
             mode: "bubble",
             tenant: QUOKRA_TENANT,
             getToken: agentToken,
+            // Sound, toasts and browser notifications for new chats and replies.
+            notifications: true,
             // "Open full view" in the drawer goes to the Support page, same conversation.
             fullView: (id) =>
               navigate(id ? `/support?conversation=${id}` : "/support"),
