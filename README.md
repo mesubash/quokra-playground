@@ -16,9 +16,11 @@
 ## Pages
 
 - **Landing** (`/`): marketing page with a sign-in call to action
-- **Login** (`/login`): mock sign-in, any email and password works.
-  The session is stored in `localStorage` (see `src/lib/auth.ts`); signed-out
-  visitors are sent to `/login`. Log out sits in the header and the user menu.
+- **Login** (`/login`): mock sign-in with two tabs. **Customer**: any email and
+  password. **Support agent**: pick Sam or Alex, the demo agents in Quokra's
+  dev data. The session is stored in `localStorage` and a cookie for the dev
+  backend (see `src/lib/auth.ts`); signed-out visitors are sent to `/login`.
+  Log out sits in the header and the user menu.
 - **Dashboard**: stat cards, an area chart and a data table
 - **Users**: user table with add/edit dialog
 - **Mail**: inbox with a reading pane
@@ -71,6 +73,13 @@ backend inside the Vite server stands in for it (`dev/quokra-api.ts`):
 The browser side is in `src/lib/quokra.ts`, `src/components/quokra/` and
 `src/app/support/`.
 
+## Docs
+
+- [Content brief: Quokra on the landing page](docs/QUOKRA_CONTENT.md): what
+  Quokra is, which sections to add to the marketing page (how it works,
+  integration, API, FAQ), ready-to-use copy and code, and the facts to keep
+  accurate.
+
 ## Project layout
 
 ```
@@ -81,6 +90,8 @@ src/
   contexts/     theme and sidebar state
   hooks/        shared hooks
 public/         logo.png, favicons and site.webmanifest
+dev/            dev backend for Quokra tokens (runs inside the Vite server)
+docs/           content brief for the landing page
 ```
 
 To add a page, create `src/app/<name>/page.tsx`, register it in
