@@ -1,13 +1,18 @@
 "use client"
 
 import * as React from "react"
+import { LogOut } from "lucide-react"
+import { useNavigate } from "react-router-dom"
+import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { CommandSearch, SearchTrigger } from "@/components/command-search"
 import { ModeToggle } from "@/components/mode-toggle"
+import { signOut } from "@/lib/auth"
 
 export function SiteHeader() {
   const [searchOpen, setSearchOpen] = React.useState(false)
+  const navigate = useNavigate()
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -35,6 +40,17 @@ export function SiteHeader() {
           </div>
           <div className="ml-auto flex items-center gap-2">
             <ModeToggle />
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                signOut()
+                navigate("/login", { replace: true })
+              }}
+            >
+              <LogOut data-icon="inline-start" />
+              Log out
+            </Button>
           </div>
         </div>
       </header>

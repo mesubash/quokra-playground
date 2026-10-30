@@ -4,10 +4,12 @@ import {
   EllipsisVertical,
   BellDot,
   CircleUser,
+  LogOut,
 } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import { Logo } from "@/components/logo"
+import { signOut } from "@/lib/auth"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,6 +36,7 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+  const navigate = useNavigate()
 
   return (
     <SidebarMenu>
@@ -96,6 +99,17 @@ export function NavUser({
                 Notifications
               </DropdownMenuItem>
             </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={() => {
+                signOut()
+                navigate("/login", { replace: true })
+              }}
+            >
+              <LogOut />
+              Log out
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

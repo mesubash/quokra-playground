@@ -13,6 +13,7 @@ import { Logo } from "@/components/logo"
 
 import { NavMain } from "@/components/nav-main"
 import { NavUser } from "@/components/nav-user"
+import { getUser } from "@/lib/auth"
 import {
   Sidebar,
   SidebarContent,
@@ -24,11 +25,6 @@ import {
 } from "@/components/ui/sidebar"
 
 const data = {
-  user: {
-    name: "Admin",
-    email: "admin@example.com",
-    avatar: "",
-  },
   navGroups: [
     {
       label: "Overview",
@@ -115,7 +111,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         ))}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={{ ...getUser()!, avatar: "" }} />
       </SidebarFooter>
     </Sidebar>
   )
