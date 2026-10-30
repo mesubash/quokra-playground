@@ -25,14 +25,16 @@ export function GitHubMark({ className }: { className?: string }) {
   )
 }
 
+/** Where the demo starts for whoever is signed in, or the login page. */
+function demoHome() {
+  const user = getUser()
+  return user ? (user.role === "agent" ? "/support" : "/dashboard") : "/login"
+}
+
 /** Signed out: go to login. Signed in: straight back into the demo. */
 export function DemoButton() {
   const user = getUser()
-  const to = user
-    ? user.role === "agent"
-      ? "/support"
-      : "/dashboard"
-    : "/login"
+  const to = demoHome()
   return (
     <Button size="lg" nativeButton={false} render={<Link to={to} />}>
       {user ? "Open the demo" : "Try the demo"}
@@ -113,9 +115,9 @@ export function MarketingHeader() {
           <Button
             className="ml-1"
             nativeButton={false}
-            render={<Link to="/login" />}
+            render={<Link to={demoHome()} />}
           >
-            Sign in
+            {getUser() ? "Open dashboard" : "Sign in"}
           </Button>
         </div>
       </header>

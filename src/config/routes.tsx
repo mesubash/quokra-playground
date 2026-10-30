@@ -17,7 +17,11 @@ export const routes: RouteObject[] = [
   { path: "/auth/callback", lazy: page(() => import("@/app/auth/callback")) },
   {
     path: "/login",
-    loader: () => (getUser() ? redirect("/dashboard") : null),
+    loader: () => {
+      const user = getUser()
+      if (!user) return null
+      return redirect(user.role === "agent" ? "/support" : "/dashboard")
+    },
     lazy: page(() => import("@/app/login/page")),
   },
   // Everything below needs a (mock) session
