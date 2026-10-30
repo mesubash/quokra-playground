@@ -10,8 +10,12 @@
 </p>
 
 <p align="center">
+  <strong><a href="https://quokra.subashsdhami.com.np">Live demo</a></strong> ·
   React 19 · Vite · TypeScript · Tailwind CSS v4 · shadcn/ui
 </p>
+
+> The live demo runs on free plans. If it hasn't been used for a while, the first load can take a few
+> minutes while Quokra starts. Anyone can sign in as a demo agent, so don't enter anything private.
 
 ![The playground dashboard with the Quokra chat open, handing a customer over to the team](public/screens/dashboard-with-chat.jpg)
 
