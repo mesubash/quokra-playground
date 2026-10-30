@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { getUser } from "@/lib/auth"
+import { AGENT_LOGIN } from "@/lib/agent-login"
 import {
   agentToken,
   identityToken,
@@ -53,7 +54,8 @@ export function QuokraWidgets() {
     if (previous && previous !== customerEmail) {
       loadQuokra().then((quokra) => quokra.chat.logout())
     }
-    if (!customerEmail) return
+    // On a static public demo there's no backend to vouch for the customer, so they chat as a guest.
+    if (!customerEmail || AGENT_LOGIN === "demo") return
     let cancelled = false
     Promise.all([loadQuokra(), identityToken()])
       .then(([quokra, token]) => !cancelled && quokra.chat.identify(token))

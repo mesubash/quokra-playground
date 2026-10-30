@@ -1,4 +1,5 @@
 import { redirect, type LoaderFunctionArgs } from "react-router-dom"
+import { AGENT_LOGIN } from "@/lib/agent-login"
 import { oidc } from "@/lib/oidc"
 
 // Playground session. Customers use a mock login (any email). Agents sign in for real through the
@@ -18,9 +19,10 @@ export interface SessionUser {
 
 // The agents in the local Keycloak realm (Quokra's server/keycloak/quokra-realm.json).
 // Dev only: their passwords are public.
+// sub: their id there, which the demo sign-in uses too, so they're the demo company's agents either way.
 export const DEMO_AGENTS = [
-  { name: "Sam", username: "sam", password: "sam" },
-  { name: "Alex", username: "alex", password: "alex" },
+  { name: "Sam Lee", username: "sam", password: "sam", sub: "0b9e8a3c-0001-4000-8000-00000000a001" },
+  { name: "Alex Kim", username: "alex", password: "alex", sub: "0b9e8a3c-0001-4000-8000-00000000a002" },
 ]
 
 export function getUser(): SessionUser | null {
@@ -43,7 +45,8 @@ export function signIn(user: SessionUser) {
 
 export function signOut() {
   // Agents also end their session at the identity provider, which then returns to /login.
-  if (getUser()?.role === "agent") {
+  // With the demo sign-in there's none: forgetting the session is enough.
+  if (getUser()?.role === "agent" && AGENT_LOGIN === "oidc") {
     clearSession()
     void oidc.signoutRedirect().catch(() => oidc.removeUser())
     return

@@ -25,7 +25,8 @@ import {
   signIn,
   type SessionUser,
 } from "@/lib/auth"
-import { oidc } from "@/lib/oidc"
+import { AGENT_LOGIN } from "@/lib/agent-login"
+import { demoSignIn, oidc } from "@/lib/oidc"
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -46,9 +47,17 @@ export default function LoginPage() {
     )
   }
 
-  // Agents sign in at the identity provider; it sends them back to /auth/callback.
-  function agentSignIn(username: string) {
+  // Agents sign in at the identity provider; it sends them back to /auth/callback. On a public demo
+  // (VITE_AGENT_LOGIN=demo) Quokra's demo sign-in is used instead, straight from here.
+  function agentSignIn(agent: (typeof DEMO_AGENTS)[number]) {
     setPending(true)
+    if (AGENT_LOGIN === "demo") {
+      void demoSignIn(agent)
+        .then(() => enter({ name: agent.name, email: `${agent.username}@example.test`, role: "agent" }))
+        .catch(() => setPending(false))
+      return
+    }
+    const username = agent.username
     void oidc
       .signinRedirect({
         login_hint: username,
@@ -164,8 +173,9 @@ export default function LoginPage() {
                   </TabsContent>
                   <TabsContent value="agent">
                     <p className="mb-3 text-sm text-muted-foreground">
-                      Answer chats from the Support page. You sign in on the
-                      real login page (Keycloak).
+                      {AGENT_LOGIN === "demo"
+                        ? "Answer chats from the Support page, as one of the demo agents."
+                        : "Answer chats from the Support page. You sign in on the real login page (Keycloak)."}
                     </p>
                     <div className="grid gap-2">
                       {DEMO_AGENTS.map((agent) => (
@@ -174,16 +184,18 @@ export default function LoginPage() {
                           variant="outline"
                           className="h-auto justify-start gap-3 py-3"
                           disabled={pending}
-                          onClick={() => agentSignIn(agent.username)}
+                          onClick={() => agentSignIn(agent)}
                         >
                           <Headset className="size-4" aria-hidden />
                           <span className="flex flex-col items-start">
                             <span className="font-medium">
                               Sign in as {agent.name}
                             </span>
-                            <span className="text-xs text-muted-foreground">
-                              Password: {agent.password}
-                            </span>
+                            {AGENT_LOGIN === "oidc" && (
+                              <span className="text-xs text-muted-foreground">
+                                Password: {agent.password}
+                              </span>
+                            )}
                           </span>
                         </Button>
                       ))}
