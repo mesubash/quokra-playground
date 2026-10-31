@@ -93,12 +93,13 @@ const guides = [
     file: "guides/02-set-up-a-company.md",
     title: "Set up a company",
     summary:
-      "Admins create each company in the console's Admin tab and get its keys and embed code.",
+      "Admins create each company in the console's Settings (the gear icon) and get its keys and embed code.",
     steps: [
-      "Admin → New company: slug, name, colour, bot file, when quiet chats close",
+      "In a console mounted without tenant: Settings → + New company",
+      "Slug, name, colour, bot file, when quiet chats close, email, how long chats are kept, images, opening hours",
       "List the websites (chat) and dashboards (console) allowed to embed it",
       "Copy the publishable key and the ready-made embed snippets",
-      "Add agents by work email; create the secret key if you identify customers",
+      "Add agents by work email; create the secret key if you identify customers; add saved replies",
     ],
   },
   {
@@ -148,11 +149,11 @@ const guides = [
     file: "guides/07-write-the-bot.md",
     title: "Write the bot",
     summary:
-      "A YAML file per company: greeting, menu, keywords, urgent words and wording.",
+      "Greeting, menu, keywords, urgent words and the chat's wording, edited in Settings or kept in a file.",
     steps: [
-      "Copy the demo bot file and point QUOKRA_BOTS_DIR at your folder",
-      "Write the menu answers and keywords; add urgent words that go straight to the team",
-      "Pick the file for the company in the Admin tab",
+      "Settings → Bot: questions, keywords, answers, handing over and Wording; saved at once, no restart",
+      "Or with a file: copy the demo bot file and point QUOKRA_BOTS_DIR at your folder",
+      "Add urgent words that go straight to the team; Use the file again drops the edited copy",
     ],
   },
   {
@@ -163,7 +164,19 @@ const guides = [
     steps: [
       "The dashboard passes notifications: true",
       "Agents click Turn on once to allow browser notifications",
-      "The bell menu chooses what notifies each agent, and how",
+      "The bell menu or Settings → Notifications chooses what notifies each agent, and how",
+      "With SMTP set up: email the team about waiting chats, and customers the replies they missed",
+    ],
+  },
+  {
+    file: "guides/09-free-demo.md",
+    title: "A free public demo",
+    summary:
+      "Put Quokra and the playground online on free plans: Render, Neon and Vercel.",
+    steps: [
+      "A Neon database, then Quokra on Render from render.yaml",
+      "The playground on Vercel with VITE_AGENT_LOGIN=demo",
+      "Set QUOKRA_DEMO_ORIGINS to the playground's address",
     ],
   },
 ]
@@ -180,7 +193,11 @@ const sdkCalls = [
   ],
   [
     'Quokra.chat.on("unread", n => …)',
-    "Events: ready, open, close, unread, identified",
+    "Events: ready, open, close, unread, identified, identifyfailed, unavailable",
+  ],
+  [
+    "Quokra.chat.setTheme(theme)",
+    "Change the theme, e.g. when your dark mode is toggled",
   ],
   ["Quokra.console.mount(el, { tenant, getToken })", "Full-page agent console"],
   [
@@ -189,7 +206,7 @@ const sdkCalls = [
   ],
   [
     'Quokra.console.on("unread", n => …)',
-    "Waiting chats plus unread in my chats, e.g. for a nav badge",
+    "Waiting chats plus unread in my chats, e.g. for a nav badge. Also ready, open, close, expand, notification, unavailable",
   ],
   [
     "notifications: true",
@@ -205,6 +222,8 @@ const restEndpoints = [
     "Switch to a logged-in customer",
   ],
   ["POST /widget/conversation/messages", "Customer chat", "Send a message"],
+  ["POST /widget/conversation/attachments", "Customer chat", "Send an image"],
+  ["POST /widget/conversation/new", "Customer chat", "Start a new chat"],
   [
     "GET /agent/conversations?status=WAITING",
     "Agents",
@@ -213,6 +232,9 @@ const restEndpoints = [
   ["POST /agent/conversations/{id}/accept", "Agents", "Take a conversation"],
   ["POST /agent/conversations/{id}/messages", "Agents", "Reply"],
   ["POST /agent/conversations/{id}/resolve", "Agents", "Close it"],
+  ["GET /agent/conversations/{id}/replies", "Agents", "Saved replies"],
+  ["POST /agent/presence", "Agents", "Online or away"],
+  ["PUT /admin/tenants/{slug}/bot", "Admins", "Save the company's bot"],
 ]
 
 const realtimeEvents = [
@@ -223,6 +245,7 @@ const realtimeEvents = [
   "conversation.transferred",
   "note.created",
   "note.added",
+  "typing",
 ]
 
 const customizations = [
@@ -232,11 +255,15 @@ const customizations = [
   ],
   [
     "Brand colour",
-    'Set per company, or pass accent: "#0f766e" from your page.',
+    'Set per company and used in the chat and the console, or pass accent: "#0f766e" from your page.',
   ],
   [
     "Wording",
-    "Greeting, menu, answers, header status and the bot's questions come from a per-company file. No code change.",
+    "Greeting, menu, answers, header status and the bot's questions, edited per company in Settings (or kept in a file). No code change.",
+  ],
+  [
+    "Opening hours",
+    "A time zone and hours per day. Outside them the customer is told the team is away and when it's back.",
   ],
   [
     "Placement",
@@ -249,6 +276,8 @@ const securityPoints = [
   "Agents sign in through your identity provider; Quokra checks the token, the role and team membership on every request.",
   "Customer identity is signed by your backend with a secret that never reaches the browser, and tokens live at most 5 minutes.",
   "Rate limits, blocked contacts, and messages always shown as plain text.",
+  "Images are checked by their first bytes (PNG, JPEG, GIF, WebP; SVG is refused) and served with nosniff and a sandbox policy.",
+  "Resolved chats are deleted after the time each company chooses, within the server's limits.",
 ]
 
 function DocsLink({ file, children }: { file: string; children: string }) {
@@ -384,8 +413,8 @@ export default function DocsPage() {
           <section className="mt-20">
             <Heading id="guides">Guides</Heading>
             <p className="mt-4 text-muted-foreground">
-              Step by step, from running it locally to notifications. Each links
-              to the full guide in the Quokra repo.
+              Step by step, from running it locally to a free public demo. Each
+              links to the full guide in the Quokra repo.
             </p>
             <ol className="mt-8 grid gap-4 sm:grid-cols-2">
               {guides.map((guide, i) => (

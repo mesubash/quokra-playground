@@ -30,6 +30,8 @@
 - **Login** (`/login`): two tabs. **Customer**: mock sign-in, any email, no
   password. **Support agent**: real sign-in on the identity provider's own
   page (Keycloak locally) as Sam or Alex, which returns to `/auth/callback`.
+  With `VITE_AGENT_LOGIN=demo` (the live demo) it uses Quokra's demo sign-in
+  instead, with no identity provider.
   The app session is stored in `localStorage` and a cookie for the dev backend
   (see `src/lib/auth.ts` and `src/lib/oidc.ts`); signed-out visitors are sent
   to `/login`. Log out sits in the header and the user menu, and for agents
@@ -122,17 +124,21 @@ The browser side is in `src/lib/quokra.ts`, `src/components/quokra/` and
 ## Copy rules
 
 When editing the marketing pages (`src/app/landing/`, `src/app/docs/`), keep
-the claims true to Quokra v1. The Quokra repo's `README.md` and `docs/` are the
-source of truth.
+the claims true to Quokra 2.0. The Quokra repo's `README.md`, `docs/` and
+`docs/CHANGELOG.md` are the source of truth.
 
-- **Say:** FAQ bot from a per-company file; human handoff in the same
-  conversation; chat as bubble, inline or popup; console as full page or
+- **Say:** FAQ bot, edited in Settings or kept in a file; human handoff in the
+  same conversation; chat as bubble, inline or popup; console as full page or
   drawer; agent login through the host's OIDC; customer identify with HS256
-  tokens of at most 5 minutes; light/dark, accent colour, per-company wording.
+  tokens of at most 5 minutes; light/dark, company colour in the chat and
+  console, per-company wording; images (disk or S3), saved replies, opening
+  hours, notifications and email alerts (with SMTP), typing, online / away,
+  replies to a message, "Start a new chat", retention per company; free and
+  open source under AGPL-3.0, self-hosted, Docker image.
 - **Don't say** (not built yet): AI answers or "AI-powered", WhatsApp or email
-  channels, analytics or CSAT, a hosted SaaS, pricing or sign-up, attachments,
-  canned replies, business hours. These may appear only on the roadmap,
-  marked as planned.
+  channels, analytics or CSAT, a hosted SaaS, pricing or sign-up, more
+  languages, mobile push, a standalone console login. These may appear only on
+  the roadmap, marked as next or planned.
 - **Tone:** plain, short, concrete. No "revolutionary" or "seamless".
 
 ## Project layout
@@ -146,7 +152,6 @@ src/
   hooks/        shared hooks
 public/         logo.png, favicons and site.webmanifest
 dev/            dev backend for Quokra tokens (runs inside the Vite server)
-docs/           content brief for the landing page
 ```
 
 To add a page, create `src/app/<name>/page.tsx`, register it in

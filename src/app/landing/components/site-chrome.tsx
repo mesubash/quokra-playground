@@ -73,7 +73,8 @@ export function MarketingHeader() {
     <>
       <div className="border-b bg-muted/60 text-sm">
         <p className="mx-auto max-w-6xl px-4 py-2 text-muted-foreground">
-          v1 is feature complete and being tried in this playground.{" "}
+          Quokra 2.0 is out: images, saved replies, opening hours, email alerts
+          and more.{" "}
           <Link
             to="/#roadmap"
             className="font-medium whitespace-nowrap text-foreground underline-offset-4 hover:underline"
@@ -140,6 +141,7 @@ const footerColumns = [
     links: [
       { label: "Developer docs", href: "/docs" },
       { label: "Embedding guide", href: docsUrl("EMBEDDING.md") },
+      { label: "Guides", href: docsUrl("guides/README.md") },
       { label: "API reference", href: docsUrl("API.md") },
       { label: "Architecture", href: docsUrl("ARCHITECTURE.md") },
       { label: "Run it locally", href: docsUrl("DEVELOPMENT.md") },
@@ -150,6 +152,8 @@ const footerColumns = [
     links: [
       { label: "Quokra on GitHub", href: QUOKRA_REPO },
       { label: "Plan", href: docsUrl("PLAN.md") },
+      { label: "Changelog", href: docsUrl("CHANGELOG.md") },
+      { label: "Licence (AGPL-3.0)", href: repoFile("LICENSE") },
       { label: "Report an issue", href: `${QUOKRA_REPO}/issues` },
       { label: "Playground source", href: PLAYGROUND_REPO },
       {

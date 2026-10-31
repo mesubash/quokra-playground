@@ -47,6 +47,10 @@ const audiences = [
       "Handoff to a person in the same chat",
       "Works across devices when they're logged in",
       "Follows your site's light or dark mode",
+      "Images, shown full size in the chat",
+      "Reply to a particular message, and see when the agent is typing",
+      "“Start a new chat” from the chat's menu",
+      "Told when the team is back, outside opening hours",
     ],
   },
   {
@@ -56,8 +60,12 @@ const audiences = [
       "Queue, my chats and resolved lists with unread counts",
       "Search by name, email or message",
       "Reply, private notes, transfer, resolve, reopen",
+      "Saved replies picked with /",
+      "Online / Away status",
       "Block abusive contacts",
-      "New-chat sound and live updates",
+      "Sounds, toasts and browser notifications",
+      "Email alerts when nobody is online (with your SMTP server)",
+      "Quiet chats close by themselves",
     ],
   },
   {
@@ -68,6 +76,9 @@ const audiences = [
       "Identify logged-in customers with a signed token",
       "JavaScript API and events",
       "REST and WebSocket API documented",
+      "Bot, wording and company settings edited in Settings, no YAML needed",
+      "Images on disk or in S3-compatible storage",
+      "A versioned Docker image",
     ],
   },
 ]
@@ -77,26 +88,27 @@ const roadmap = [
   {
     version: "v1",
     title: "FAQ bot + human handoff",
-    status: "Now",
+    status: "Done",
     items: [
       "Customer chat and agent console via one script tag",
-      "Left for v1: real agent login against an identity provider, tenant setup tooling, the Docker image",
+      "Agent login with your identity provider, company settings and keys, a Docker image",
     ],
   },
   {
     version: "v2",
     title: "Daily operations",
-    status: "Planned",
+    status: "Done",
     items: [
-      "Canned replies, business hours and offline messages",
-      "Attachments, browser notifications, FAQ editing in the console",
-      "Standalone console login, more languages",
+      "Notifications, email alerts, saved replies, opening hours",
+      "Images, replies to a message, typing, online / away",
+      "Bot and wording edited in Settings, retention per company",
+      "Later, when someone asks: more languages, mobile push, standalone console login",
     ],
   },
   {
     version: "v3",
     title: "AI answers",
-    status: "Planned",
+    status: "Next",
     items: [
       "Answers grounded in your documents, with sources",
       "Summary for the agent on handoff",
@@ -135,15 +147,27 @@ const faqs = [
   },
   {
     q: "Can I change the colours and texts?",
-    a: "Yes, per company, without code.",
+    a: "Yes, per company, in Settings: colour, logo, the bot and all of the chat's wording. No code change or restart.",
+  },
+  {
+    q: "Can customers send images?",
+    a: "Yes, PNG, JPEG, GIF or WebP up to 5 MB, once an admin allows images for the company. They're stored on your disk or in S3-compatible storage.",
+  },
+  {
+    q: "What happens outside opening hours?",
+    a: "The bot still answers and chats still reach the queue, but the customer is told the team is away and when it's back.",
   },
   {
     q: "Where does it run?",
-    a: "On your own server: a Spring Boot app with PostgreSQL. A Docker image is on the v1 list.",
+    a: "On your own server: one Docker image (ghcr.io/mesubash/quokra:<version>) and PostgreSQL. There's also a guide for a free public demo on Render, Neon and Vercel.",
   },
   {
     q: "Is there AI?",
-    a: "Not yet. v1 answers from your FAQ; AI answers are planned for v3.",
+    a: "Not yet. The bot answers from your FAQ. AI answers from your own documents are next, in v3.",
+  },
+  {
+    q: "What does it cost?",
+    a: "Nothing. Quokra is free and open source under the AGPL-3.0, and you host it yourself.",
   },
 ]
 
@@ -236,7 +260,8 @@ export default function LandingPage() {
               <GitHubButton />
             </div>
             <p className="mt-6 text-sm text-muted-foreground">
-              Self-hosted · Spring Boot + PostgreSQL · Works with any stack
+              Free and open source (AGPL-3.0) · Self-hosted · Works with any
+              stack
             </p>
           </div>
           <figure className="mt-14 lg:mt-20">
@@ -280,7 +305,7 @@ export default function LandingPage() {
               text="A menu and keywords per company. Common questions get an answer straight away, and urgent words go to the team."
               points={[
                 "Bubble, inline panel or popup",
-                "Your brand colour and wording, no code change",
+                "Your brand colour and wording, edited in Settings",
                 "Guests and logged-in customers",
               ]}
               image={
@@ -301,6 +326,7 @@ export default function LandingPage() {
                 "Email and name collected in the chat for guests",
                 "Logged-in customers keep one conversation across devices",
                 "The agent sees the whole history",
+                "Outside opening hours, customers are told when the team is back",
               ]}
               image={
                 <Shot
@@ -323,7 +349,8 @@ export default function LandingPage() {
                 <p className="mt-3 text-muted-foreground">
                   Full page or a drawer from a floating button, signed in with
                   your dashboard's own login. Queue, my chats and resolved
-                  lists, with unread counts and live updates.
+                  lists, with unread counts and live updates. Settings sit
+                  behind the gear icon.
                 </p>
               </div>
               <Shot
@@ -336,11 +363,14 @@ export default function LandingPage() {
               <ul className="mt-8 grid gap-x-10 gap-y-2 text-sm text-muted-foreground sm:grid-cols-2 lg:grid-cols-3">
                 {[
                   "Reply, which also accepts the chat",
+                  "Saved replies picked with /",
+                  "Reply to a particular message, send images",
                   "Private notes for the team",
                   "Transfer, return to the bot, resolve, reopen",
                   "Search by name, email or message",
+                  "Online / Away, and see when the customer is typing",
+                  "Sounds, toasts, browser notifications and email alerts",
                   "Block abusive contacts",
-                  "A sound for new chats",
                 ].map((p) => (
                   <li key={p}>{p}</li>
                 ))}
@@ -354,7 +384,7 @@ export default function LandingPage() {
               text="Quokra follows your page's light or dark mode by itself, or a theme you choose, with your own accent colour."
               points={[
                 "Light, dark or auto",
-                "Per-company accent colour",
+                "Company colour in the chat and the console",
                 "Bottom right or left, or inline in your page",
               ]}
               image={
@@ -394,7 +424,7 @@ export default function LandingPage() {
         <section className="border-t">
           <div className="mx-auto max-w-6xl px-4 py-16 lg:py-20">
             <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
-              Everything in v1
+              Everything in 2.0
             </h2>
             <div className="mt-10 divide-y border-y">
               {audiences.map((group) => (
@@ -422,7 +452,8 @@ export default function LandingPage() {
               </h2>
               <p className="mt-3 text-muted-foreground">
                 One Spring Boot app serves the API, the realtime connection, the
-                bot and both UIs. Your data stays in your PostgreSQL.
+                bot and both UIs. Your data stays in your PostgreSQL, and images
+                on your disk or in your S3-compatible bucket.
               </p>
               <dl className="mt-8 space-y-3 text-sm">
                 {[
@@ -430,6 +461,8 @@ export default function LandingPage() {
                   ["Database", "PostgreSQL"],
                   ["UI", "React + TypeScript (Vite)"],
                   ["Realtime", "STOMP over WebSocket"],
+                  ["Image", "ghcr.io/mesubash/quokra"],
+                  ["Licence", "AGPL-3.0"],
                 ].map(([k, v]) => (
                   <div key={k} className="grid grid-cols-[6rem_minmax(0,1fr)]">
                     <dt className="text-muted-foreground">{k}</dt>
@@ -482,7 +515,7 @@ cd ../server && ./mvnw spring-boot:run \\
                 <li
                   key={r.version}
                   className={
-                    r.status === "Now"
+                    r.status === "Next"
                       ? "bg-background p-5"
                       : "bg-background/60 p-5"
                   }
@@ -491,7 +524,9 @@ cd ../server && ./mvnw spring-boot:run \\
                     <span className="font-mono text-sm tabular-nums">
                       {r.version}
                     </span>
-                    <Badge variant={r.status === "Now" ? "default" : "outline"}>
+                    <Badge
+                      variant={r.status === "Next" ? "default" : "outline"}
+                    >
                       {r.status}
                     </Badge>
                   </div>
