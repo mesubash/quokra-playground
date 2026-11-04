@@ -26,7 +26,7 @@ const steps = [
   },
   {
     title: "The bot answers first",
-    text: "From your FAQ menu and keywords. Urgent words like “outage” go straight to the team, marked urgent.",
+    text: "From your FAQ menu and keywords, and if you turn it on, with AI from your own documents. Urgent words like “outage” go straight to the team, marked urgent.",
   },
   {
     title: "“Talk to a person”",
@@ -44,6 +44,7 @@ const audiences = [
     items: [
       "Chat bubble, inline panel or popup",
       "Instant answers from your FAQ",
+      "Optional AI answers from your own documents, marked as AI with their sources",
       "Handoff to a person in the same chat",
       "Works across devices when they're logged in",
       "Follows your site's light or dark mode",
@@ -61,11 +62,13 @@ const audiences = [
       "Search by name, email or message",
       "Reply, private notes, transfer, resolve, reopen",
       "Saved replies picked with /",
+      "Optional AI-suggested replies from your documents, to edit or send",
       "Online / Away status",
       "Block abusive contacts",
       "Sounds, toasts and browser notifications",
       "Email alerts when nobody is online (with your SMTP server)",
       "Quiet chats close by themselves",
+      "Company admins who manage only their own company",
     ],
   },
   {
@@ -78,6 +81,7 @@ const audiences = [
       "REST and WebSocket API documented",
       "Bot, wording and company settings edited in Settings, no YAML needed",
       "Images on disk or in S3-compatible storage",
+      "Any OpenAI-compatible AI provider (Gemini, OpenAI, your own model), or none",
       "A versioned Docker image",
     ],
   },
@@ -108,10 +112,10 @@ const roadmap = [
   {
     version: "v3",
     title: "AI answers",
-    status: "Next",
+    status: "In progress",
     items: [
-      "Answers grounded in your documents, with sources",
-      "Summary for the agent on handoff",
+      "Done in 2.2: knowledge documents, suggested replies for agents, bot answers from your documents with sources",
+      "Next: cost limits per chat, visitor, company and server, and a summary for the agent on handoff",
     ],
   },
   {
@@ -163,7 +167,7 @@ const faqs = [
   },
   {
     q: "Is there AI?",
-    a: "Not yet. The bot answers from your FAQ. AI answers from your own documents are next, in v3.",
+    a: "Yes, optional and off by default for each company. Agents can get suggested replies, and the bot can answer customers itself, only from documents you add. Answers are marked as AI and show their sources; with no good answer the chat goes to your team. It needs a key for an OpenAI-compatible provider.",
   },
   {
     q: "What does it cost?",
@@ -424,7 +428,7 @@ export default function LandingPage() {
         <section className="border-t">
           <div className="mx-auto max-w-6xl px-4 py-16 lg:py-20">
             <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
-              Everything in 2.0
+              Everything in 2.2
             </h2>
             <div className="mt-10 divide-y border-y">
               {audiences.map((group) => (
@@ -515,7 +519,7 @@ cd ../server && ./mvnw spring-boot:run \\
                 <li
                   key={r.version}
                   className={
-                    r.status === "Next"
+                    r.status === "In progress"
                       ? "bg-background p-5"
                       : "bg-background/60 p-5"
                   }
@@ -525,7 +529,7 @@ cd ../server && ./mvnw spring-boot:run \\
                       {r.version}
                     </span>
                     <Badge
-                      variant={r.status === "Next" ? "default" : "outline"}
+                      variant={r.status === "In progress" ? "default" : "outline"}
                     >
                       {r.status}
                     </Badge>

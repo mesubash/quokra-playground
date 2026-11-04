@@ -143,6 +143,7 @@ const guides = [
       "Roles SUPPORT_AGENT and QUOKRA_ADMIN, audience quokra-api in access tokens",
       "Set OIDC_ISSUER_URI (and the roles claim) on the Quokra server",
       "Check with GET /api/v1/agent/me: 200 is good, 401 bad token, 403 missing role",
+      "Optional: company admins from a token claim (QUOKRA_COMPANY_ADMIN_CLAIM)",
     ],
   },
   {
@@ -234,6 +235,16 @@ const restEndpoints = [
   ["POST /agent/conversations/{id}/resolve", "Agents", "Close it"],
   ["GET /agent/conversations/{id}/replies", "Agents", "Saved replies"],
   ["POST /agent/presence", "Agents", "Online or away"],
+  [
+    "POST /agent/conversations/{id}/suggestion",
+    "Agents",
+    "AI-suggested reply from the documents",
+  ],
+  [
+    "POST /admin/tenants/{slug}/knowledge",
+    "Admins",
+    "Add a knowledge document",
+  ],
   ["PUT /admin/tenants/{slug}/bot", "Admins", "Save the company's bot"],
 ]
 
