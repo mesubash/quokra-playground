@@ -124,7 +124,7 @@ The browser side is in `src/lib/quokra.ts`, `src/components/quokra/` and
 ## Copy rules
 
 When editing the marketing pages (`src/app/landing/`, `src/app/docs/`), keep
-the claims true to Quokra 2.2. The Quokra repo's `README.md`, `docs/` and
+the claims true to Quokra 2.3. The Quokra repo's `README.md`, `docs/` and
 `docs/CHANGELOG.md` are the source of truth.
 
 - **Say:** FAQ bot, edited in Settings or kept in a file; human handoff in the
@@ -136,10 +136,10 @@ the claims true to Quokra 2.2. The Quokra repo's `README.md`, `docs/` and
   replies to a message, "Start a new chat", retention per company; company
   admins; optional AI (off by default): suggested replies for agents and bot
   answers from the company's own documents, marked as AI with sources, through
-  any OpenAI-compatible provider; free and open source under AGPL-3.0,
+  any OpenAI-compatible provider, with cost limits; free and open source under AGPL-3.0,
   self-hosted, Docker image.
 - **Don't say** (not built yet): "AI-powered", AI that answers beyond the
-  company's documents, AI cost limits or handoff summaries (next), WhatsApp or email
+  company's documents, handoff summaries (next), WhatsApp or email
   channels, analytics or CSAT, a hosted SaaS, pricing or sign-up, more
   languages, mobile push, a standalone console login. These may appear only on
   the roadmap, marked as next or planned.

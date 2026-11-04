@@ -114,8 +114,8 @@ const roadmap = [
     title: "AI answers",
     status: "In progress",
     items: [
-      "Done in 2.2: knowledge documents, suggested replies for agents, bot answers from your documents with sources",
-      "Next: cost limits per chat, visitor, company and server, and a summary for the agent on handoff",
+      "Done: knowledge documents, suggested replies for agents, bot answers from your documents with sources (2.2), cost limits (2.3)",
+      "Next: a summary for the agent on handoff",
     ],
   },
   {
@@ -428,7 +428,7 @@ export default function LandingPage() {
         <section className="border-t">
           <div className="mx-auto max-w-6xl px-4 py-16 lg:py-20">
             <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
-              Everything in 2.2
+              Everything in 2.3
             </h2>
             <div className="mt-10 divide-y border-y">
               {audiences.map((group) => (
