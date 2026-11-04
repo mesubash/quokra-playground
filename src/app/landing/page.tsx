@@ -529,7 +529,9 @@ cd ../server && ./mvnw spring-boot:run \\
                       {r.version}
                     </span>
                     <Badge
-                      variant={r.status === "In progress" ? "default" : "outline"}
+                      variant={
+                        r.status === "In progress" ? "default" : "outline"
+                      }
                     >
                       {r.status}
                     </Badge>
