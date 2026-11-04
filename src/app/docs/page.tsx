@@ -180,6 +180,17 @@ const guides = [
       "Set QUOKRA_DEMO_ORIGINS to the playground's address",
     ],
   },
+  {
+    file: "guides/10-set-up-ai.md",
+    title: "Set up AI",
+    summary:
+      "Let AI suggest replies, answer customers and summarise handoffs, only from your own documents.",
+    steps: [
+      "Set QUOKRA_AI_KEY (Gemini by default, or any OpenAI-compatible provider)",
+      "Settings → Knowledge: add your documents, text or Markdown",
+      "Settings → General → AI: suggest replies to agents, and answer customers",
+    ],
+  },
 ]
 
 const sdkCalls = [

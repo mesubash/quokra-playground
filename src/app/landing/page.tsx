@@ -52,6 +52,8 @@ const audiences = [
       "Reply to a particular message, and see when the agent is typing",
       "“Start a new chat” from the chat's menu",
       "Told when the team is back, outside opening hours",
+      "Rate the chat afterwards, and get it emailed to them",
+      "Emoji, clickable links, and a check for typos in their email",
     ],
   },
   {
@@ -68,6 +70,9 @@ const audiences = [
       "Sounds, toasts and browser notifications",
       "Email alerts when nobody is online (with your SMTP server)",
       "Quiet chats close by themselves",
+      "An AI summary of the chat when it reaches the queue",
+      "Where each chat came from: page, campaign, country, device",
+      "Keyboard shortcuts, and ratings per agent for admins",
       "Company admins who manage only their own company",
     ],
   },
@@ -80,6 +85,7 @@ const audiences = [
       "JavaScript API and events",
       "REST and WebSocket API documented",
       "Bot, wording and company settings edited in Settings, no YAML needed",
+      "Bot follow-up questions and topics with short links",
       "Images on disk or in S3-compatible storage",
       "Any OpenAI-compatible AI provider (Gemini, OpenAI, your own model), or none",
       "A versioned Docker image",
@@ -112,16 +118,16 @@ const roadmap = [
   {
     version: "v3",
     title: "AI answers",
-    status: "In progress",
+    status: "Done",
     items: [
-      "Done: knowledge documents, suggested replies for agents, bot answers from your documents with sources (2.2), cost limits (2.3)",
-      "Next: a summary for the agent on handoff",
+      "Knowledge documents, suggested replies for agents, bot answers from your documents with sources",
+      "Cost limits, and an AI summary for the agent on handoff",
     ],
   },
   {
     version: "v4",
     title: "Channels",
-    status: "Planned",
+    status: "Next",
     items: ["WhatsApp and email", "Identity-verified lookups via your backend"],
   },
   {
@@ -428,7 +434,7 @@ export default function LandingPage() {
         <section className="border-t">
           <div className="mx-auto max-w-6xl px-4 py-16 lg:py-20">
             <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
-              Everything in 2.3
+              Everything in 2.4
             </h2>
             <div className="mt-10 divide-y border-y">
               {audiences.map((group) => (
@@ -519,7 +525,7 @@ cd ../server && ./mvnw spring-boot:run \\
                 <li
                   key={r.version}
                   className={
-                    r.status === "In progress"
+                    r.status === "Next"
                       ? "bg-background p-5"
                       : "bg-background/60 p-5"
                   }
@@ -529,9 +535,7 @@ cd ../server && ./mvnw spring-boot:run \\
                       {r.version}
                     </span>
                     <Badge
-                      variant={
-                        r.status === "In progress" ? "default" : "outline"
-                      }
+                      variant={r.status === "Next" ? "default" : "outline"}
                     >
                       {r.status}
                     </Badge>
