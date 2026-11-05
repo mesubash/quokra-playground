@@ -168,7 +168,7 @@ const footerColumns = [
 const footerLink =
   "underline-offset-4 whitespace-nowrap hover:text-foreground hover:underline"
 
-// Buy me a momo, in BuyMeMomo's colours (the same in both themes, like a brand badge). The momo bounces
+// Buy Me Momo, in BuyMeMomo's colours (the same in both themes, like a brand badge). The momo bounces
 // on hover; styles in index.css (.momo-button). The mark is cropped from BuyMeMomo's own logo.
 function MomoButton() {
   return (
@@ -185,7 +185,7 @@ function MomoButton() {
         width="24"
         height="24"
       />
-      Buy me a momo
+      Buy Me Momo
     </a>
   )
 }
