@@ -1,5 +1,6 @@
 export const QUOKRA_REPO = "https://github.com/mesubash/quokra"
 export const PLAYGROUND_REPO = "https://github.com/mesubash/quokra-playground"
+export const SUPPORT_URL = "https://buymemomo.com/mesubash"
 export const TEMPLATE_REPO =
   "https://github.com/shadcnstore/shadcn-dashboard-landing-template"
 

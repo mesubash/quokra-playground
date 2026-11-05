@@ -7,6 +7,7 @@ import { getUser } from "@/lib/auth"
 import {
   PLAYGROUND_REPO,
   QUOKRA_REPO,
+  SUPPORT_URL,
   TEMPLATE_REPO,
   docsUrl,
   repoFile,
@@ -160,6 +161,7 @@ const footerColumns = [
         label: "Third-party notices",
         href: repoFile("THIRD_PARTY_NOTICES.md"),
       },
+      { label: "Buy me a momo", href: SUPPORT_URL },
     ],
   },
 ]
