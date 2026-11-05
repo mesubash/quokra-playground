@@ -126,15 +126,18 @@ const roadmap = [
   },
   {
     version: "v4",
-    title: "Channels",
-    status: "Next",
-    items: ["WhatsApp and email", "Identity-verified lookups via your backend"],
+    title: "Channels and lookups",
+    status: "Not planned",
+    items: [
+      "WhatsApp and email, identity-verified lookups via your backend",
+      "Planned in the repo, built only if a real need comes up",
+    ],
   },
   {
     version: "v5",
     title: "Platform",
-    status: "Later",
-    items: ["Tenant self-service, analytics and CSAT", "Public release"],
+    status: "Not planned",
+    items: ["Tenant self-service and analytics"],
   },
 ]
 

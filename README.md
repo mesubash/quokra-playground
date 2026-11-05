@@ -143,7 +143,7 @@ the claims true to Quokra 2.4. The Quokra repo's `README.md`, `docs/` and
 - **Don't say** (not built yet): "AI-powered", AI that answers beyond the
   company's documents, WhatsApp or email channels, analytics dashboards, a hosted SaaS, pricing or sign-up, more
   languages, mobile push, a standalone console login. These may appear only on
-  the roadmap, marked as next or planned.
+  the roadmap, marked as not planned.
 - **Tone:** plain, short, concrete. No "revolutionary" or "seamless".
 
 ## Project layout
