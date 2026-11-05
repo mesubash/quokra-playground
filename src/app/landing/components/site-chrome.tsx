@@ -161,13 +161,34 @@ const footerColumns = [
         label: "Third-party notices",
         href: repoFile("THIRD_PARTY_NOTICES.md"),
       },
-      { label: "Buy me a momo", href: SUPPORT_URL },
     ],
   },
 ]
 
 const footerLink =
   "underline-offset-4 whitespace-nowrap hover:text-foreground hover:underline"
+
+// Buy me a momo, in BuyMeMomo's colours (the same in both themes, like a brand badge). The momo bounces
+// on hover; styles in index.css (.momo-button). The mark is cropped from BuyMeMomo's own logo.
+function MomoButton() {
+  return (
+    <a
+      className="momo-button mt-5"
+      href={SUPPORT_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img
+        className="momo-icon"
+        src="/brand/buymemomo.png"
+        alt=""
+        width="24"
+        height="24"
+      />
+      Buy me a momo
+    </a>
+  )
+}
 
 export function MarketingFooter() {
   return (
@@ -182,6 +203,7 @@ export function MarketingFooter() {
             Support chat for your site and dashboard: a bot answers first, your
             team takes over in the same conversation.
           </p>
+          <MomoButton />
         </div>
         {footerColumns.map((col) => (
           <nav key={col.title} aria-label={col.title}>
